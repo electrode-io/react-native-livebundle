@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.livebundle">
+    <application>
+       <activity android:name=".LiveBundleActivity" android:exported="true">
+            <intent-filter android:label="LBIntentDL">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="livebundle" android:host="packages" />
+                <data android:scheme="livebundle" android:host="sessions" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

@@ -1,0 +1,18 @@
+task:
+  bundle:
+    - dev: true
+      entry: index.js
+      platform: android
+    - dev: false
+      entry: index.js
+      platform: android
+  upload:
+    azure:
+      account: livebundle
+      container: demo
+
+qrcode:
+  image:
+    generate: true
+  term:
+    generate: false

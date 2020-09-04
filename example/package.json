@@ -1,0 +1,33 @@
+{
+  "name": "example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "lint": "eslint .",
+    "livebundle": "livebundle",
+    "start": "react-native start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "16.13.1",
+    "react-native": "0.63.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/runtime": "^7.11.2",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "babel-jest": "^26.2.2",
+    "eslint": "^7.6.0",
+    "jest": "^26.2.2",
+    "livebundle": "^0.2.6",
+    "metro-react-native-babel-preset": "^0.61.0",
+    "react-native-livebundle": "link:../",
+    "react-test-renderer": "16.13.1",
+    "react-native-camera": "^3.36.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}

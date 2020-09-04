@@ -1,0 +1,36 @@
+{
+  "name": "react-native-livebundle",
+  "title": "React Native LiveBundle",
+  "version": "0.0.1",
+  "description": "LiveBundle native module",
+  "main": "index.js",
+  "files": [
+    "README.md",
+    "android",
+    "index.js",
+    "ios",
+    "react-native-livebundle.podspec"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/electrode-io/react-native-livebundle.git",
+    "baseUrl": "https://github.com/electrode-io/react-native-livebundle"
+  },
+  "keywords": [
+    "react-native",
+    "livebundle"
+  ],
+  "license": "Apache-2.0",
+  "licenseFilename": "LICENSE",
+  "readmeFilename": "README.md",
+  "peerDependencies": {
+    "react": "^16.13.1",
+    "react-native": ">=0.60.0-rc.0 <1.0.x",
+    "react-native-camera": "^3.36.0"
+  },
+  "devDependencies": {
+    "react": "^16.13.1",
+    "react-native": "^0.63.2",
+    "react-native-camera": "^3.36.0"
+  }
+}
