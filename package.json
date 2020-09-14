@@ -1,13 +1,16 @@
 {
   "name": "react-native-livebundle",
   "title": "React Native LiveBundle",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "LiveBundle native module",
   "main": "index.js",
   "files": [
     "README.md",
     "android",
+    "assets",
     "index.js",
+    "LiveBundle.js",
+    "LiveBundleUI.js",
     "ios",
     "react-native-livebundle.podspec"
   ],

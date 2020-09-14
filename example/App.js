@@ -21,7 +21,7 @@ export default class App extends Component<{}> {
         <Text style={styles.welcome}>LiveBundle Demo</Text>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => livebundle.launchLiveBundleUI()}>
+          onPress={() => livebundle.launchUI()}>
           <Text style={styles.buttonText}>LiveBundle</Text>
         </TouchableOpacity>
       </View>

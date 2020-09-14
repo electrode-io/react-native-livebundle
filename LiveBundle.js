@@ -1,5 +1,4 @@
-import { AppRegistry, NativeModules, Platform } from "react-native";
-import { LiveBundleUI } from "./LiveBundleUI";
+import { NativeModules, Platform } from "react-native";
 import {setCustomSourceTransformer} from 'react-native/Libraries/Image/resolveAssetSource';
 
 export class LiveBundle {
@@ -41,8 +40,8 @@ export class LiveBundle {
   /**
    * Launches LiveBundle UI
    */
-  launchLiveBundleUI() {
-    NativeModules.LiveBundle.launchLiveBundleUI();
+  launchUI() {
+    NativeModules.LiveBundle.launchUI();
   }
 
   /**
@@ -115,8 +114,6 @@ export class LiveBundle {
     return NativeModules.LiveBundle.installBundle();
   }
 }
-
-AppRegistry.registerComponent('LiveBundleUI', () => LiveBundleUI);
 
 const livebundle = new LiveBundle();
 export default livebundle;

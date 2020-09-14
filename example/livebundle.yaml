@@ -3,9 +3,6 @@ task:
     - dev: true
       entry: index.js
       platform: android
-    - dev: false
-      entry: index.js
-      platform: android
   upload:
     azure:
       account: livebundle

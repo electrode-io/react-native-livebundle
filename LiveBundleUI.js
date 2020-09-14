@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {
+  AppRegistry,
   Image,
   StyleSheet,
   Text,
@@ -213,3 +214,5 @@ const styles = StyleSheet.create({
     marginBottom: 20
   }
 });
+
+AppRegistry.registerComponent('LiveBundleUI', () => LiveBundleUI);

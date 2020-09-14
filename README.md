@@ -61,7 +61,7 @@ If you are using a LiveBundle package Deep Link rather than a QR Code, then you 
 
 ## Programmatically launching LiveBundle
 
-In case you are using builds that don't give access to the React Native developper menu, it is possible to launch LiveBundle menu programmatically, only by making the following call from your React Native application `livebundle.launchLiveBundleUI()`
+In case you are using builds that don't give access to the React Native developper menu, it is possible to launch LiveBundle menu programmatically, only by making the following call from your React Native application `livebundle.launchUI()`
 
 Each application is different, so we cannot tell you precisely where from to make this call, but it will probably end up being done from your own application developer/debug menu.
 

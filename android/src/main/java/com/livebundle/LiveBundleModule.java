@@ -136,7 +136,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
         @Override
         public void onOptionSelected() {
           // Launch LiveBundleUI component if the option is selected by the user
-          launchLiveBundleUI(null);
+          launchUI(null);
         }
       });
       /**
@@ -171,7 +171,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
    * Starts LiveBundleActivity that is containing the LiveBundleUI RN component
    */
   @ReactMethod
-  public void launchLiveBundleUI(@Nullable Promise promise) {
+  public void launchUI(@Nullable Promise promise) {
     ReactInstanceManager instanceManager = getInstanceManager();
     Intent intent = new Intent(instanceManager.getCurrentReactContext(), LiveBundleActivity.class);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
