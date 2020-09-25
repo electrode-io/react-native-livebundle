@@ -26,6 +26,10 @@ export class LiveBundleUI extends Component<{}> {
     };
   }
 
+  componentWillUnmount() {
+    console.log(`componentWillUnmount`);
+  }
+
   render() {
     const {
       bundleId,
@@ -49,7 +53,7 @@ export class LiveBundleUI extends Component<{}> {
       BackHandler.exitApp();
     } else if (packageId && !packageMetadata && !bundleId ) {
       // If we have a packageId but no bundleId yet then we need
-      // to retrieve the package metadata to look at which bundles
+      // to retrieve the package metadata to look at what bundles
       // the package contains
       screen = (
         <View style={styles.subContainer}>
@@ -158,6 +162,7 @@ export class LiveBundleUI extends Component<{}> {
           >
             <Text style={styles.buttonText}>Scan</Text>
           </TouchableOpacity>
+          {livebundle.res && (livebundle.res.isBundleInstalled || livebundle.res.isSessionStarted) &&
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -167,6 +172,16 @@ export class LiveBundleUI extends Component<{}> {
           >
             <Text style={styles.buttonText}>Reset</Text>
           </TouchableOpacity>
+          }
+          {livebundle.res && (livebundle.res.isBundleInstalled) &&
+            <Text style={styles.bottomText}>{`packageId: ${livebundle.res.packageId}`}</Text>
+          }
+          {livebundle.res && (livebundle.res.isBundleInstalled) &&
+            <Text style={styles.bottomText2}>{`bundleId: ${livebundle.res.bundleId}`}</Text>
+          }
+          {livebundle.res && (livebundle.res.isSessionStarted) &&
+            <Text style={styles.bottomText2}>{`Connected to live session`}</Text>
+          }
         </View>
       );
     }
@@ -212,6 +227,14 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     marginBottom: 20
+  },
+  bottomText: {
+    fontSize: 14,
+    marginTop: 20
+  },
+  bottomText2: {
+    fontSize: 14,
+    marginTop: 1
   }
 });
 

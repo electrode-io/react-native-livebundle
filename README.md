@@ -15,32 +15,13 @@ If you aren't yet familiar with LiveBundle, you can try out the [LiveBundle demo
 
 Using npm
 
-`$ npm install react-native-livebundle --save-dev`
+`$ npm install react-native-livebundle`
 
 Using yarn
 
-`$ yarn add react-native-livebundle --dev`
+`$ yarn add react-native-livebundle`
 
 LiveBundle has a peer dependency on [react-native-camera](https://github.com/react-native-community/react-native-camera). It relies on this native module for the QR Code scanning functionality. Therefore, you will also need to have a dependency on this package, if your application isn't already using it.
-
-## Initializing LiveBundle
-
-Just import `react-native-livebundle` in your top level component *(first screen launched)* and in `componentDidMount`, make a call to LiveBundle `initialize` method, with your Azure Blob Container url.
-
-```javascript
-import livebundle from 'react-native-livebundle';
-
-componentDidMount() {
-  livebundle.initialize({
-    // Full Azure Blob Sotrage url including container
-    // ex: 'https://foo.blob.core.windows.net/bar/'
-    azureUrl,
-  });
-  // Other code ...
-}
-```
-
-*BLE Remark: We should also offer alternative ways to initialize in the near future, such as by exposing a wrapper component to just wrap the top level application component*
 
 ## Using LiveBundle
 
@@ -49,13 +30,9 @@ If your build offers access to this menu, you can just bring it up and tap `Live
 
 ![GitHub Logo](./assets/lb-menu-item.png)
 
-This will bring up the LiveBundle menu, with the two following options:
-
-![GitHub Logo](./assets/lb-menu.png)
-
 Tapping `Scan` will bring up the QR Code scanner. If this is the first time you launch the scanner and have not yet granted camera access permission, LiveBundle will ask you for this permission. You can then just scan a LiveBundle package QR Code and it will download and install the bundle contained within *(if the package contains multiple bundle flavor, LiveBundle will ask you to choose which bundle flavor to install)*
 
-Tapping `Reset` will reset the state of the application to what it was prior to installing any LiveBundle package *(for example in case a local metro server was used, it will reload the bundle from this local packager)*
+Tapping `Reset` will reset the state of the application to what it was prior to installing any LiveBundle package *(for example in case a local metro server was used, it will reload the bundle from this local packager)*. The `Reset` button is only present if the application is a LiveBundle context is active *(LiveBundle bundle installed or LiveBundle session active)*.
 
 If you are using a LiveBundle package Deep Link rather than a QR Code, then you can just navigate to the Deep Link.
 

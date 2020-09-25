@@ -6,23 +6,17 @@ import React, {Component} from 'react';
 import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 import livebundle from 'react-native-livebundle';
 
-const azureUrl = 'https://livebundle.blob.core.windows.net/demo/';
-
 export default class App extends Component<{}> {
-  componentDidMount() {
-    livebundle.initialize({
-      azureUrl,
-    });
-  }
-
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>LiveBundle Demo</Text>
+        <Text style={styles.welcome}>{`LiveBundle Demo [${
+          __DEV__ ? 'dev' : 'prod'
+        }]`}</Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => livebundle.launchUI()}>
-          <Text style={styles.buttonText}>LiveBundle</Text>
+          <Text style={styles.buttonText}>Launch LiveBundle Menu</Text>
         </TouchableOpacity>
       </View>
     );
@@ -37,7 +31,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.3,
     alignItems: 'center',
     margin: 5,
-    width: 165,
+    width: 220,
     padding: 6,
   },
   buttonText: {

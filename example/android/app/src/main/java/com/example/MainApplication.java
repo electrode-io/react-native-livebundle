@@ -10,6 +10,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import com.livebundle.LiveBundleModule;
+import com.livebundle.example.MainActivity;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -44,6 +46,11 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+    LiveBundleModule.initialize(
+      getReactNativeHost().getReactInstanceManager(),
+      MainActivity.class,
+      "https://02513afc7fstg.blob.core.windows.net/demo/",
+      "?sv=2019-10-10&si=read&sr=c&sig=fr91iHiQa0EDcAVAw1hn%2B%2FZPsJiPZ84c8sd%2BlGA1gV0%3D");
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
 

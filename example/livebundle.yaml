@@ -1,15 +1,23 @@
-task:
-  bundle:
-    - dev: true
-      entry: index.js
-      platform: android
-  upload:
-    azure:
-      account: livebundle
-      container: demo
+# JavaScript bundler
+bundler:
+  metro:
+    bundles:
+      - dev: true
+        entry: index.js
+        platform: android
 
-qrcode:
-  image:
-    generate: true
-  term:
-    generate: false
+# Storage
+storage:
+  azure:
+    accountUrl: https://02513afc7fstg.blob.core.windows.net
+    container: demo
+
+# Generators
+generators:
+  qrcode:
+  deeplink:
+
+# Notifiers
+notifiers:
+  terminal:
+  viewer:
