@@ -8,6 +8,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
@@ -64,6 +65,8 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
   private static ReactInstanceManager sReactInstanceManager;
   private static String sAzureSasToken;
   private static String sAzureUrl;
+  private static ReactNativeHost sReactNativeHost;
+
   private final File mJSLiveBundleFile;
   private final File mJSLiveBundleZipFile;
 
@@ -151,17 +154,22 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
    * Initialize LiveBundle
    * Should be called by client application during application start
    *
-   * @param manager           ReactInstanceManager instance
+   * @param reactNativeHost   Instance of ReactNativeHost to use
    * @param azureUrl          Azure URL
    * @param azureSasToken     Azure SAS token (reads)
    */
   public static void initialize(
-    ReactInstanceManager manager,
+    ReactNativeHost reactNativeHost,
     String azureUrl,
     String azureSasToken) {
-    LiveBundleModule.sReactInstanceManager = manager;
+    LiveBundleModule.sReactNativeHost = reactNativeHost;
+    LiveBundleModule.sReactInstanceManager = reactNativeHost.getReactInstanceManager();
     LiveBundleModule.sAzureUrl = azureUrl;
     LiveBundleModule.sAzureSasToken = azureSasToken;
+  }
+
+  public static ReactNativeHost getReactNativeHost() {
+    return LiveBundleModule.sReactNativeHost;
   }
 
   /**

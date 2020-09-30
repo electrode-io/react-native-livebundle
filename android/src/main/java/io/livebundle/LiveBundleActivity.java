@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
+import com.facebook.react.ReactNativeHost;
 
 public class LiveBundleActivity extends ReactActivity {
   private String mDeepLinkPackageId;
@@ -53,6 +54,11 @@ public class LiveBundleActivity extends ReactActivity {
   protected ReactActivityDelegate createReactActivityDelegate() {
     Log.d(TAG, "createReactActivityDelegate()");
     return new ReactActivityDelegate(this, getMainComponentName()) {
+      @Override
+      protected ReactNativeHost getReactNativeHost() {
+        return LiveBundleModule.getReactNativeHost();
+      }
+
       @Nullable
       @Override
       protected Bundle getLaunchOptions() {
