@@ -6,6 +6,7 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="livebundle" android:host="menu" />
                 <data android:scheme="livebundle" android:host="packages" />
                 <data android:scheme="livebundle" android:host="sessions" />
             </intent-filter>

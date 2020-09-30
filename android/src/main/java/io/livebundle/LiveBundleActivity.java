@@ -40,6 +40,8 @@ public class LiveBundleActivity extends ReactActivity {
         } else if (authority.equals("sessions")) {
           Log.d(TAG, "onCreate() sessions deeplink");
           this.mDeppLinkLiveSessionId = uri.getQueryParameter("id");
+        } else if (authority.equals("menu")) {
+          Log.d(TAG, "onCreate() menu deeplink");
         }
       } catch (Exception e) {
       }
