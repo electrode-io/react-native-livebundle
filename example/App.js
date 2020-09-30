@@ -10,9 +10,7 @@ export default class App extends Component<{}> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>{`LiveBundle Demo [${
-          __DEV__ ? 'dev' : 'prod'
-        }]`}</Text>
+        <Text style={styles.welcome}>LiveBundle Demo</Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => livebundle.launchUI()}>

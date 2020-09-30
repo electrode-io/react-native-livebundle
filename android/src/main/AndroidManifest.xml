@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.livebundle">
     <application>
-       <activity android:name=".LiveBundleActivity" android:exported="true">
+       <activity android:name="com.livebundle.LiveBundleActivity" android:exported="true">
             <intent-filter android:label="LBIntentDL">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT" />

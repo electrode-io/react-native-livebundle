@@ -1,5 +1,6 @@
 package com.livebundle;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -51,6 +52,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
   private static final String PREFS_DEBUG_SERVER_HOST_KEY = "debug_http_host";
   private static final String PREFS_DEBUG_SERVER_HOST_KEY_BACKUP = "debug_http_host_backup";
   private static final String TAG = "LiveBundleModule";
+
   //
   // Keep the following variables static so that they are preserved
   // after recreating react context (which recreates native modules)
@@ -60,13 +62,14 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
   private static boolean sBundleInstalled = false;
   private static boolean sSessionStarted = false;
   private static ReactInstanceManager sReactInstanceManager;
-  private static Class<?> sMainActivityClazz;
   private static String sAzureSasToken;
   private static String sAzureUrl;
   private final File mJSLiveBundleFile;
   private final File mJSLiveBundleZipFile;
+
   private final BundleDownloader mBundleDownloader;
   private final SharedPreferences mPreferences;
+  private final String mApplicationPackageName;
 
   /**
    * LiveBundle constructor
@@ -92,6 +95,10 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
     // Create file handles
     mJSLiveBundleZipFile = new File(reactContext.getApplicationContext().getFilesDir(), JS_LIVEBUNDLE_ZIP_FILE_NAME);
     mJSLiveBundleFile = new File(reactContext.getApplicationContext().getFilesDir(), JS_LIVEBUNDLE_FILE_NAME);
+
+    //
+    // Get application package name
+    mApplicationPackageName = reactContext.getApplicationContext().getPackageName();
 
     //
     // Create bundle downloader (to download LiveBundle bundles)
@@ -145,17 +152,14 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
    * Should be called by client application during application start
    *
    * @param manager           ReactInstanceManager instance
-   * @param mainActivityClass Main Activity class of application
    * @param azureUrl          Azure URL
    * @param azureSasToken     Azure SAS token (reads)
    */
   public static void initialize(
     ReactInstanceManager manager,
-    Class<?> mainActivityClass,
     String azureUrl,
     String azureSasToken) {
     LiveBundleModule.sReactInstanceManager = manager;
-    LiveBundleModule.sMainActivityClazz = mainActivityClass;
     LiveBundleModule.sAzureUrl = azureUrl;
     LiveBundleModule.sAzureSasToken = azureSasToken;
   }
@@ -391,6 +395,9 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
         @Override
         public void run() {
           try {
+            Context appContext = instanceManager.getCurrentReactContext().getApplicationContext();
+            Intent appLaunchIntent = appContext.getPackageManager().getLaunchIntentForPackage(mApplicationPackageName);
+
             //
             // Start the main activity of the client application.
             // This is mostly solely needed when a LiveBundle bundle is installed from a deep link
@@ -402,9 +409,8 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
             // Because we are using FLAG_ACTIVITY_NEW_TASK, all other scenarios are also properly
             // covered. Indeed, if the main application activity already exist, it will not be
             // recreated, but the task its running in will be brought to front
-            Intent i = new Intent(instanceManager.getCurrentReactContext().getApplicationContext(), sMainActivityClazz);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            instanceManager.getCurrentReactContext().getApplicationContext().startActivity(i);
+            appLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            appContext.getApplicationContext().startActivity(appLaunchIntent);
 
             //
             // Call recreateReactContextInBackgroundFromBundleLoader method.
