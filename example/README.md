@@ -34,7 +34,7 @@ Then just tap on the link. It will trigger LiveBundle in the demo application, a
 
 If you are using a simulator or a device without Slack, you can use `adb` to navigate to the deep link. Just run the following command from a terminal.
 
-`$ adb shell am start -W -a android.intent.action.VIEW -d "livebundle://packages?id=97557a75-2236-4f8c-843c-927719e16c3b" com.livebundle.example`
+`$ adb shell am start -W -a android.intent.action.VIEW -d "livebundle://packages?id=97557a75-2236-4f8c-843c-927719e16c3b" io.livebundle.example`
 
 ## Try uploading your own changes
 
