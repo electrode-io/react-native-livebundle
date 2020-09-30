@@ -48,7 +48,6 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
     LiveBundleModule.initialize(
       getReactNativeHost().getReactInstanceManager(),
-      MainActivity.class,
       "https://02513afc7fstg.blob.core.windows.net/demo/",
       "?sv=2019-10-10&si=read&sr=c&sig=fr91iHiQa0EDcAVAw1hn%2B%2FZPsJiPZ84c8sd%2BlGA1gV0%3D");
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
