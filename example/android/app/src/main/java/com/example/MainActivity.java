@@ -1,4 +1,4 @@
-package com.livebundle.example;
+package io.livebundle.example;
 
 import com.facebook.react.ReactActivity;
 

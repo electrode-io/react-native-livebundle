@@ -1,4 +1,4 @@
-package com.livebundle;
+package io.livebundle;
 
 import android.content.Context;
 import android.content.SharedPreferences;

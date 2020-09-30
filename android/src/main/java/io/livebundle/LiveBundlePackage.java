@@ -1,4 +1,4 @@
-package com.livebundle;
+package io.livebundle;
 
 import java.util.Arrays;
 import java.util.Collections;
