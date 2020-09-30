@@ -1,7 +1,7 @@
 {
   "name": "react-native-livebundle",
   "title": "React Native LiveBundle",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "LiveBundle native module",
   "main": "index.js",
   "files": [
