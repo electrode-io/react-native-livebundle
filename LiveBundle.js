@@ -50,6 +50,13 @@ export class LiveBundle {
     const res = await fetch(
       this.getAzureUrl(`packages/${packageId}/metadata.json`)
     );
+    if (!res.ok) {
+      throw new Error(
+        `[LiveBundle] getPackageMetadata request failed : ${res.status} ${(
+          await res.text()
+        ).toString()}`
+      );
+    }
     return res.json();
   }
 
@@ -62,6 +69,13 @@ export class LiveBundle {
     const res = await fetch(
       this.getAzureUrl(`sessions/${sessionId}/metadata.json`)
     );
+    if (!res.ok) {
+      throw new Error(
+        `[LiveBundle] getLiveSessionMetadata request failed : ${res.status} ${(
+          await res.text()
+        ).toString()}`
+      );
+    }
     return res.json();
   }
 
