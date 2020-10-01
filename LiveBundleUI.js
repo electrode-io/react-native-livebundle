@@ -23,6 +23,7 @@ export class LiveBundleUI extends Component<{}> {
       packageId: props && props.deepLinkPackageId,
       packageMetadata: undefined,
       sessionId: props && props.deepLinkSessionId,
+      error: undefined,
     };
   }
 
@@ -39,17 +40,33 @@ export class LiveBundleUI extends Component<{}> {
       packageId,
       packageMetadata,
       sessionId,
+      error,
     } = this.state;
     let screen;
-    if (isDownloadCompleted) {
+    if (error) {
+      screen = (
+        <View style={styles.subContainer}>
+          <Image
+            resizeMode="contain"
+            style={styles.logo}
+            source={require("./assets/logo.png")}
+          />
+          <Text style={styles.error}>{error.message}</Text>
+        </View>
+      );
+    } else if (isDownloadCompleted) {
       // If we have a bundle ready to be installed, install
       // it and exist the menu
-      livebundle.installBundle();
+      livebundle.installBundle().catch((error) => {
+        this.setState({ error });
+      });
       BackHandler.exitApp();
     } else if (sessionId) {
       console.log(`sessionId: ${sessionId}`);
       // If we have a session id just launch the live session
-      livebundle.launchLiveSession(sessionId);
+      livebundle.launchLiveSession(sessionId).catch((error) => {
+        this.setState({ error });
+      });
       BackHandler.exitApp();
     } else if (packageId && !packageMetadata && !bundleId) {
       // If we have a packageId but no bundleId yet then we need
@@ -62,12 +79,15 @@ export class LiveBundleUI extends Component<{}> {
             style={styles.logo}
             source={require("./assets/logo.png")}
           />
-          <Text style={styles.text}>Loading Package</Text>
+          <Text style={styles.bottomText}>Loading Package</Text>
         </View>
       );
-      livebundle.getPackageMetadata(packageId).then((packageMetadata) => {
-        this.setState({ packageMetadata });
-      });
+      livebundle
+        .getPackageMetadata(packageId)
+        .then((packageMetadata) => {
+          this.setState({ packageMetadata });
+        })
+        .catch((error) => this.setState({ error }));
     } else if (packageId && packageMetadata && !bundleId) {
       // If we have the package metadata, we need to check if there
       // is one or more bundle(s) in the package
@@ -75,9 +95,11 @@ export class LiveBundleUI extends Component<{}> {
         (b) => b.platform === Platform.OS
       );
       if (platformBundles.length === 0) {
-        throw new Error(
-          `No bundle for ${Platform.OS} platform in package ${packageId}`
-        );
+        this.setState({
+          error: new Error(
+            `No bundle for ${Platform.OS} platform in package ${packageId}`
+          ),
+        });
       } else if (platformBundles.length === 1) {
         // Only one bundle in package for this platform.
         // Immediately proceed to download.
@@ -119,11 +141,14 @@ export class LiveBundleUI extends Component<{}> {
     } else if (packageId && bundleId) {
       // If we have a packageId and a bundleId then we can download
       // the bundle from the storage
-      livebundle.downloadBundle(packageId, bundleId).then(() => {
-        this.setState({
-          isDownloadCompleted: true,
-        });
-      });
+      livebundle
+        .downloadBundle(packageId, bundleId)
+        .then(() => {
+          this.setState({
+            isDownloadCompleted: true,
+          });
+        })
+        .catch((error) => this.setState({ error }));
     } else if (isScanInitiated && !isScanCompleted) {
       // If the scanning has been triggered, show the scanner
       screen = (
@@ -185,14 +210,10 @@ export class LiveBundleUI extends Component<{}> {
             </TouchableOpacity>
           )}
           {isBundleInstalled && (
-            <Text
-              style={styles.bottomText}
-            >{`packageId: ${packageId}`}</Text>
+            <Text style={styles.bottomText}>{`packageId: ${packageId}`}</Text>
           )}
           {isBundleInstalled && (
-            <Text
-              style={styles.bottomText2}
-            >{`bundleId: ${bundleId}`}</Text>
+            <Text style={styles.bottomText2}>{`bundleId: ${bundleId}`}</Text>
           )}
           {isSessionStarted && (
             <Text
@@ -252,6 +273,11 @@ const styles = StyleSheet.create({
   bottomText2: {
     fontSize: 14,
     marginTop: 1,
+  },
+  error: {
+    fontSize: 15,
+    textAlign: "center",
+    margin: 10,
   },
 });
 
