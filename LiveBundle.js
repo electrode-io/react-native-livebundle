@@ -1,27 +1,7 @@
 import { NativeModules, Platform } from "react-native";
-import {setCustomSourceTransformer} from 'react-native/Libraries/Image/resolveAssetSource';
+import { setCustomSourceTransformer } from "react-native/Libraries/Image/resolveAssetSource";
 
 export class LiveBundle {
-  constructor() {
-    console.log(`[LiveBundle] ctor`);
-    this.sasToken = NativeModules.LiveBundle.AZURE_SASTOKEN;
-    this.azureUrl = NativeModules.LiveBundle.AZURE_URL;
-
-    NativeModules.LiveBundle.getState().then(res => {
-      console.log(`[LiveBundle] ctor. getState() call response: ${JSON.stringify(res, null, 2)}`);
-      this.res = res;
-      if (res.isBundleInstalled) {
-        setCustomSourceTransformer((resolver) => {
-          const res = resolver.scaledAssetPath();
-          const {hash, name, type} = resolver.asset;
-          res.uri = this.getAzureUrl(`assets/${hash}/${name}.${type}`);
-          console.log(`Asset uri is : ${res.uri}`);
-          return res;
-        });
-      }
-    });
-  }
-
   /**
    * Gets prefixed azure url
    * @param {string} p The prefix to append to the url.
@@ -32,29 +12,56 @@ export class LiveBundle {
   }
 
   /**
+   * Initializes LiveBundle
+   * This method should be called by client app on launch
+   */
+  initialize() {
+    console.log("[LiveBundle] initialize()");
+    this.sasToken = NativeModules.LiveBundle.AZURE_SASTOKEN;
+    this.azureUrl = NativeModules.LiveBundle.AZURE_URL;
+    this.state = {};
+    this.getState().then((state) => {
+      this.state = state;
+      if (this.state.isBundleInstalled) {
+        setCustomSourceTransformer((resolver) => {
+          const res = resolver.scaledAssetPath();
+          const { hash, name, type } = resolver.asset;
+          res.uri = this.getAzureUrl(`assets/${hash}/${name}.${type}`);
+          return res;
+        });
+      }
+    });
+  }
+
+  /**
+   * Returns current LiveBundle state
+   */
+  async getState() {
+    console.log("[LiveBundle] getState()");
+    return NativeModules.LiveBundle.getState();
+  }
+
+  /**
    * Retrieves metadata of a LiveBundle package
    * @param {string} packageId The id of the package
    */
   async getPackageMetadata(packageId) {
     console.log(`[LiveBundle] getPackageMetadata(${packageId})`);
-    let res;
-    try {
-      res = await fetch(this.getAzureUrl(`packages/${packageId}/metadata.json`));
-    } catch(e) {
-      console.log(`Oops: ${e}`);
-    }
-    console.log(`[LiveBundle] getPackageMetadata response: ${JSON.stringify(res, null, 2)}`);
+    const res = await fetch(
+      this.getAzureUrl(`packages/${packageId}/metadata.json`)
+    );
     return res.json();
   }
 
-   /**
+  /**
    * Retrieves metadata of a LiveBundle live session
    * @param {string} sessionId The id of the session
    */
   async getLiveSessionMetadata(sessionId) {
     console.log(`[LiveBundle] getLiveSessionMetadata(${sessionId})`);
-    const res = await fetch(this.getAzureUrl(`sessions/${sessionId}/metadata.json`));
-    console.log(`[LiveBundle] getLiveSessionMetadata response: ${JSON.stringify(res, null, 2)}`);
+    const res = await fetch(
+      this.getAzureUrl(`sessions/${sessionId}/metadata.json`)
+    );
     return res.json();
   }
 
@@ -86,10 +93,13 @@ export class LiveBundle {
     return NativeModules.LiveBundle.downloadBundle(packageId, bundleId);
   }
 
+  /**
+   * Launches a LiveBundle live session (connecting to remote package) given the session id
+   * @param {string} sessionId The id of the session to launch
+   */
   async launchLiveSession(sessionId) {
     console.log(`[LiveBundle] launchLiveSession(${sessionId})`);
     const pkgMetadata = await this.getLiveSessionMetadata(sessionId);
-    console.log(`metadata :${pkgMetadata}`)
     return NativeModules.LiveBundle.launchLiveSession(pkgMetadata.host);
   }
 
@@ -101,9 +111,13 @@ export class LiveBundle {
   async donwloadBundleFlavor(packageId, flavor) {
     console.log(`[LiveBundle] donwloadBundleFlavor(${packageId}, ${flavor})`);
     const pkgMetadata = await this.getPackageMetadata(packageId);
-    const bundle = pkgMetadata.bundles.find(b => (flavor === "dev" ? b.dev : !b.dev) && b.platform === Platform.OS);
+    const bundle = pkgMetadata.bundles.find(
+      (b) => (flavor === "dev" ? b.dev : !b.dev) && b.platform === Platform.OS
+    );
     if (!bundle) {
-      throw new Error(`[LiveBundle] donwloadBundleFlavor no dev bundle found in package ${packageId}`);
+      throw new Error(
+        `[LiveBundle] donwloadBundleFlavor no dev bundle found in package ${packageId}`
+      );
     }
     return this.downloadBundle(packageId, bundle.id);
   }
@@ -114,7 +128,7 @@ export class LiveBundle {
    */
   async donwloadDevBundle(packageId) {
     console.log(`[LiveBundle] donwloadDevBundle(${packageId})`);
-    return this.donwloadBundleFlavor(packageId, "dev")
+    return this.donwloadBundleFlavor(packageId, "dev");
   }
 
   /**
@@ -123,7 +137,7 @@ export class LiveBundle {
    */
   async donwloadProdBundle(packageId) {
     console.log(`[LiveBundle] donwloadProdBundle(${packageId})`);
-    return this.donwloadBundleFlavor(packageId, "prod")
+    return this.donwloadBundleFlavor(packageId, "prod");
   }
 
   /**

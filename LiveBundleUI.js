@@ -38,7 +38,7 @@ export class LiveBundleUI extends Component<{}> {
       isScanInitiated,
       packageId,
       packageMetadata,
-      sessionId
+      sessionId,
     } = this.state;
     let screen;
     if (isDownloadCompleted) {
@@ -47,11 +47,11 @@ export class LiveBundleUI extends Component<{}> {
       livebundle.installBundle();
       BackHandler.exitApp();
     } else if (sessionId) {
-      console.log(`sessionId: ${sessionId}`)
+      console.log(`sessionId: ${sessionId}`);
       // If we have a session id just launch the live session
       livebundle.launchLiveSession(sessionId);
       BackHandler.exitApp();
-    } else if (packageId && !packageMetadata && !bundleId ) {
+    } else if (packageId && !packageMetadata && !bundleId) {
       // If we have a packageId but no bundleId yet then we need
       // to retrieve the package metadata to look at what bundles
       // the package contains
@@ -60,14 +60,15 @@ export class LiveBundleUI extends Component<{}> {
           <Image
             resizeMode="contain"
             style={styles.logo}
-            source={require('./assets/logo.png')}
+            source={require("./assets/logo.png")}
           />
           <Text style={styles.text}>Loading Package</Text>
-        </View>);
+        </View>
+      );
       livebundle.getPackageMetadata(packageId).then((packageMetadata) => {
-        this.setState({packageMetadata})
+        this.setState({ packageMetadata });
       });
-    } else if (packageId && packageMetadata && !bundleId ) {
+    } else if (packageId && packageMetadata && !bundleId) {
       // If we have the package metadata, we need to check if there
       // is one or more bundle(s) in the package
       const platformBundles = packageMetadata.bundles.filter(
@@ -89,13 +90,15 @@ export class LiveBundleUI extends Component<{}> {
             <Image
               resizeMode="contain"
               style={styles.logo}
-              source={require('./assets/logo.png')}
+              source={require("./assets/logo.png")}
             />
             <Text style={styles.text}>Select bundle flavor to install</Text>
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                this.setState({ bundleId: platformBundles.find((b) => b.dev).id });
+                this.setState({
+                  bundleId: platformBundles.find((b) => b.dev).id,
+                });
               }}
             >
               <Text style={styles.buttonText}>Dev</Text>
@@ -103,12 +106,14 @@ export class LiveBundleUI extends Component<{}> {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-              this.setState({ bundleId: platformBundles.find((b) => !b.dev).id });
+                this.setState({
+                  bundleId: platformBundles.find((b) => !b.dev).id,
+                });
               }}
             >
               <Text style={styles.buttonText}>Prod</Text>
             </TouchableOpacity>
-         </View>
+          </View>
         );
       }
     } else if (packageId && bundleId) {
@@ -116,7 +121,7 @@ export class LiveBundleUI extends Component<{}> {
       // the bundle from the storage
       livebundle.downloadBundle(packageId, bundleId).then(() => {
         this.setState({
-          isDownloadCompleted: true
+          isDownloadCompleted: true,
         });
       });
     } else if (isScanInitiated && !isScanCompleted) {
@@ -137,8 +142,8 @@ export class LiveBundleUI extends Component<{}> {
             buttonNegative: "Cancel",
           }}
           onBarCodeRead={({ data }) => {
-            if (data.startsWith('s:')) {
-              this.setState({ sessionId: data.replace('s:', '')})
+            if (data.startsWith("s:")) {
+              this.setState({ sessionId: data.replace("s:", "") });
             } else {
               this.setState({ packageId: data });
             }
@@ -147,12 +152,18 @@ export class LiveBundleUI extends Component<{}> {
       );
     } else {
       // LiveBundle menu screen
+      const {
+        isBundleInstalled,
+        isSessionStarted,
+        packageId,
+        bundleId,
+      } = livebundle.state;
       screen = (
         <View style={styles.subContainer}>
-           <Image
+          <Image
             resizeMode="contain"
             style={styles.logo}
-            source={require('./assets/logo.png')}
+            source={require("./assets/logo.png")}
           />
           <TouchableOpacity
             style={styles.button}
@@ -162,26 +173,32 @@ export class LiveBundleUI extends Component<{}> {
           >
             <Text style={styles.buttonText}>Scan</Text>
           </TouchableOpacity>
-          {livebundle.res && (livebundle.res.isBundleInstalled || livebundle.res.isSessionStarted) &&
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              livebundle.reset();
-              BackHandler.exitApp();
-            }}
-          >
-            <Text style={styles.buttonText}>Reset</Text>
-          </TouchableOpacity>
-          }
-          {livebundle.res && (livebundle.res.isBundleInstalled) &&
-            <Text style={styles.bottomText}>{`packageId: ${livebundle.res.packageId}`}</Text>
-          }
-          {livebundle.res && (livebundle.res.isBundleInstalled) &&
-            <Text style={styles.bottomText2}>{`bundleId: ${livebundle.res.bundleId}`}</Text>
-          }
-          {livebundle.res && (livebundle.res.isSessionStarted) &&
-            <Text style={styles.bottomText2}>{`Connected to live session`}</Text>
-          }
+          {(isBundleInstalled || isSessionStarted) && (
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                livebundle.reset();
+                BackHandler.exitApp();
+              }}
+            >
+              <Text style={styles.buttonText}>Reset</Text>
+            </TouchableOpacity>
+          )}
+          {isBundleInstalled && (
+            <Text
+              style={styles.bottomText}
+            >{`packageId: ${packageId}`}</Text>
+          )}
+          {isBundleInstalled && (
+            <Text
+              style={styles.bottomText2}
+            >{`bundleId: ${bundleId}`}</Text>
+          )}
+          {isSessionStarted && (
+            <Text
+              style={styles.bottomText2}
+            >{`Connected to live session`}</Text>
+          )}
         </View>
       );
     }
@@ -203,7 +220,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#FFFFFF",
-    fontSize: 18
+    fontSize: 18,
   },
   container: {
     flex: 1,
@@ -212,7 +229,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     height: 120,
-    marginBottom:50
+    marginBottom: 50,
   },
   preview: {
     flex: 1,
@@ -226,16 +243,16 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    marginBottom: 20
+    marginBottom: 20,
   },
   bottomText: {
     fontSize: 14,
-    marginTop: 20
+    marginTop: 20,
   },
   bottomText2: {
     fontSize: 14,
-    marginTop: 1
-  }
+    marginTop: 1,
+  },
 });
 
-AppRegistry.registerComponent('LiveBundleUI', () => LiveBundleUI);
+AppRegistry.registerComponent("LiveBundleUI", () => LiveBundleUI);
