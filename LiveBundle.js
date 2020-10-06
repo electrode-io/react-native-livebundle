@@ -17,20 +17,23 @@ export class LiveBundle {
    */
   initialize() {
     console.log("[LiveBundle] initialize()");
-    this.sasToken = NativeModules.LiveBundle.AZURE_SASTOKEN;
-    this.azureUrl = NativeModules.LiveBundle.AZURE_URL;
-    this.state = {};
-    this.getState().then((state) => {
-      this.state = state;
-      if (this.state.isBundleInstalled) {
-        setCustomSourceTransformer((resolver) => {
-          const res = resolver.scaledAssetPath();
-          const { hash, name, type } = resolver.asset;
-          res.uri = this.getAzureUrl(`assets/${hash}/${name}.${type}`);
-          return res;
-        });
-      }
-    });
+    if (!this.isInitialized) {
+      this.sasToken = NativeModules.LiveBundle.AZURE_SASTOKEN;
+      this.azureUrl = NativeModules.LiveBundle.AZURE_URL;
+      this.state = {};
+      this.getState().then((state) => {
+        this.state = state;
+        if (this.state.isBundleInstalled) {
+          setCustomSourceTransformer((resolver) => {
+            const res = resolver.scaledAssetPath();
+            const { hash, name, type } = resolver.asset;
+            res.uri = this.getAzureUrl(`assets/${hash}/${name}.${type}`);
+            return res;
+          });
+        }
+      });
+      this.isInitialized = true;
+    }
   }
 
   /**
