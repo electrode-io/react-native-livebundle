@@ -25,9 +25,11 @@ export class LiveBundle {
         this.state = state;
         if (this.state.isBundleInstalled) {
           setCustomSourceTransformer((resolver) => {
+            const { hash } = resolver.asset;
             const res = resolver.scaledAssetPath();
-            const { hash, name, type } = resolver.asset;
-            res.uri = this.getAzureUrl(`assets/${hash}/${name}.${type}`);
+            const filename = res.uri.replace(/^.*[\/]/, '');
+            const platformFileName = filename.replace(/(^.*)(\..+)/, `$1.${Platform.OS}$2`)
+            res.uri = this.getAzureUrl(`assets/${hash}/${platformFileName}`);
             return res;
           });
         }
