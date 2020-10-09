@@ -20,9 +20,9 @@ export class LiveBundleUI extends Component<{}> {
       isDownloadCompleted: false,
       isScanCompleted: false,
       isScanInitiated: false,
-      packageId: props && props.packageId,
+      packageId: props?.packageId,
       packageMetadata: undefined,
-      sessionId: props && props.sessionId,
+      sessionId: props?.sessionId,
       error: undefined,
     };
   }
