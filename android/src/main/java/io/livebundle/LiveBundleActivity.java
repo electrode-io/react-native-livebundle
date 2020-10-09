@@ -69,7 +69,7 @@ public class LiveBundleActivity extends ReactActivity {
         if (LiveBundleActivity.this.mDeepLinkPackageId != null) {
           Log.d(TAG, "getLaunchOptions() deepLinkPackageId");
           Bundle bundle = new Bundle();
-          bundle.putString("deepLinkPackageId", LiveBundleActivity.this.mDeepLinkPackageId);
+          bundle.putString("packageId", LiveBundleActivity.this.mDeepLinkPackageId);
           return bundle;
         }
         //
@@ -78,7 +78,7 @@ public class LiveBundleActivity extends ReactActivity {
         else if (LiveBundleActivity.this.mDeppLinkLiveSessionId != null) {
           Log.d(TAG, "getLaunchOptions() deepLinkSessionId");
           Bundle bundle = new Bundle();
-          bundle.putString("deepLinkSessionId", LiveBundleActivity.this.mDeppLinkLiveSessionId);
+          bundle.putString("sessionId", LiveBundleActivity.this.mDeppLinkLiveSessionId);
           return bundle;
         }
         Log.d(TAG, "getLaunchOptions() null");
