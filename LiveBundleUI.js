@@ -18,7 +18,6 @@ export class LiveBundleUI extends Component<{}> {
     this.state = {
       bundleId: undefined,
       isDownloadCompleted: false,
-      isScanCompleted: false,
       isScanInitiated: false,
       packageId: props?.packageId,
       packageMetadata: undefined,
@@ -31,7 +30,6 @@ export class LiveBundleUI extends Component<{}> {
     const {
       bundleId,
       isDownloadCompleted,
-      isScanCompleted,
       isScanInitiated,
       packageId,
       packageMetadata,
@@ -145,7 +143,7 @@ export class LiveBundleUI extends Component<{}> {
           });
         })
         .catch((error) => this.setState({ error }));
-    } else if (isScanInitiated && !isScanCompleted) {
+    } else if (isScanInitiated) {
       // If the scanning has been triggered, show the scanner
       screen = (
         <RNCamera
@@ -164,9 +162,12 @@ export class LiveBundleUI extends Component<{}> {
           }}
           onBarCodeRead={({ data }) => {
             if (data.startsWith("s:")) {
-              this.setState({ sessionId: data.replace("s:", "") });
+              this.setState({
+                isScanInitiated: false,
+                sessionId: data.replace("s:", ""),
+              });
             } else {
-              this.setState({ packageId: data });
+              this.setState({ isScanInitiated: false, packageId: data });
             }
           }}
         />
