@@ -27,10 +27,6 @@ export class LiveBundleUI extends Component<{}> {
     };
   }
 
-  componentWillUnmount() {
-    console.log(`componentWillUnmount`);
-  }
-
   render() {
     const {
       bundleId,
