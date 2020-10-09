@@ -135,7 +135,7 @@ export class LiveBundle {
     );
     if (!bundle) {
       throw new Error(
-        `[LiveBundle] donwloadBundleFlavor no dev bundle found in package ${packageId}`
+        `[LiveBundle] donwloadBundleFlavor no ${flavor} bundle found in package ${packageId}`
       );
     }
     return this.downloadBundle(packageId, bundle.id);
