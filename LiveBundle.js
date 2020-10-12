@@ -3,47 +3,64 @@ import { setCustomSourceTransformer } from "react-native/Libraries/Image/resolve
 
 export class LiveBundle {
   /**
-   * Gets prefixed azure url
-   * @param {string} p The prefix to append to the url.
-   * Can be an empty string to get raw base azure url.
-   */
-  getAzureUrl(p) {
-    return `${this.azureUrl}${p}${this.sasToken}`;
-  }
-
-  /**
    * Initializes LiveBundle
    * This method should be called by client app on launch
    */
   initialize() {
     console.log("[LiveBundle] initialize()");
     if (!this.isInitialized) {
-      this.sasToken = NativeModules.LiveBundle.AZURE_SASTOKEN;
-      this.azureUrl = NativeModules.LiveBundle.AZURE_URL;
-      this.state = {};
-      this.getState().then((state) => {
-        this.state = state;
-        if (this.state.isBundleInstalled) {
-          setCustomSourceTransformer((resolver) => {
-            const { hash } = resolver.asset;
-            const res = resolver.scaledAssetPath();
-            const filename = res.uri.replace(/^.*[\/]/, '');
-            const platformFileName = filename.replace(/(^.*)(\..+)/, `$1.${Platform.OS}$2`)
-            res.uri = this.getAzureUrl(`assets/${hash}/${platformFileName}`);
-            return res;
-          });
-        }
-      });
+      const nm = NativeModules.LiveBundle;
+      this.STORAGE_URL_PREFIX = nm.STORAGE_URL_PREFIX;
+      this.STORAGE_URL_SUFFIX = nm.STORAGE_URL_SUFFIX;
+      this.PACKAGE_ID = nm.PACKAGE_ID;
+      this.BUNDLE_ID = nm.BUNDLE_ID;
+      this.IS_BUNDLE_INSTALLED = nm.IS_BUNDLE_INSTALLED;
+      this.IS_SESSION_STARTED = nm.IS_SESSION_STARTED;
+      if (this.IS_BUNDLE_INSTALLED) {
+        setCustomSourceTransformer((resolver) => {
+          const { hash } = resolver.asset;
+          const res = resolver.scaledAssetPath();
+          const filename = res.uri.replace(/^.*[\/]/, "");
+          const platformFileName = filename.replace(
+            /(^.*)(\..+)/,
+            `$1.${Platform.OS}$2`
+          );
+          res.uri = this.getUrl(`assets/${hash}/${platformFileName}`);
+          return res;
+        });
+      }
       this.isInitialized = true;
     }
   }
 
   /**
-   * Returns current LiveBundle state
+   * Gets full url to resource
+   * @param {string} resourcePath Path to resource
    */
-  async getState() {
-    console.log("[LiveBundle] getState()");
-    return NativeModules.LiveBundle.getState();
+  getUrl(resourcePath) {
+    return `${this.STORAGE_URL_PREFIX}${resourcePath}${this.STORAGE_URL_SUFFIX}`;
+  }
+
+  /**
+   * Gets the metadata associated to a LiveBundle session or package
+   * @param {string} type Either SESSION or PACKAGE
+   * @param {string} id Session or Package id
+   */
+  async getMetadata(type, id) {
+    console.log(`[LiveBundle] getMetadata(${type}, ${id})`);
+    const res = await fetch(
+      this.getUrl(
+        `${type === "PACKAGE" ? "packages" : "sessions"}/${id}/metadata.json`
+      )
+    );
+    if (!res.ok) {
+      throw new Error(
+        `[LiveBundle] getMetadata request failed : ${res.status} ${(
+          await res.text()
+        ).toString()}`
+      );
+    }
+    return res.json();
   }
 
   /**
@@ -51,19 +68,15 @@ export class LiveBundle {
    * @param {string} packageId The id of the package
    */
   async getPackageMetadata(packageId) {
-    console.log(`[LiveBundle] getPackageMetadata(${packageId})`);
-    const res =  await NativeModules.LiveBundle.getPackageMetadata(packageId);
-    return JSON.parse(res);
+    return this.getMetadata("PACKAGE", packageId);
   }
 
   /**
    * Gets the metadata associated to a LiveBundle session
    * @param {string} sessionId The id of the session
    */
-  async getSessionMetadata(sessionId) {
-    console.log(`[LiveBundle] getSessionMetadata(${sessionId})`);
-    const res =  await NativeModules.LiveBundle.getSessionMetadata(packageId);
-    return JSON.parse(res);
+  async getLiveSessionMetadata(sessionId) {
+    return this.getMetadata("SESSION", sessionId);
   }
 
   /**
