@@ -175,11 +175,11 @@ export class LiveBundleUI extends Component<{}> {
     } else {
       // LiveBundle menu screen
       const {
-        isBundleInstalled,
-        isSessionStarted,
-        packageId,
-        bundleId,
-      } = livebundle.state;
+        IS_BUNDLE_INSTALLED,
+        IS_SESSION_STARTED,
+        PACKAGE_ID,
+        BUNDLE_ID,
+      } = livebundle;
       screen = (
         <View style={styles.subContainer}>
           <Image
@@ -195,7 +195,7 @@ export class LiveBundleUI extends Component<{}> {
           >
             <Text style={styles.buttonText}>Scan</Text>
           </TouchableOpacity>
-          {(isBundleInstalled || isSessionStarted) && (
+          {(IS_BUNDLE_INSTALLED || IS_SESSION_STARTED) && (
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
@@ -206,13 +206,13 @@ export class LiveBundleUI extends Component<{}> {
               <Text style={styles.buttonText}>Reset</Text>
             </TouchableOpacity>
           )}
-          {isBundleInstalled && (
-            <Text style={styles.bottomText}>{`packageId: ${packageId}`}</Text>
+          {IS_BUNDLE_INSTALLED && (
+            <Text style={styles.bottomText}>{`packageId: ${PACKAGE_ID}`}</Text>
           )}
-          {isBundleInstalled && (
-            <Text style={styles.bottomText2}>{`bundleId: ${bundleId}`}</Text>
+          {IS_BUNDLE_INSTALLED && (
+            <Text style={styles.bottomText2}>{`bundleId: ${BUNDLE_ID}`}</Text>
           )}
-          {isSessionStarted && (
+          {IS_SESSION_STARTED && (
             <Text
               style={styles.bottomText2}
             >{`Connected to live session`}</Text>

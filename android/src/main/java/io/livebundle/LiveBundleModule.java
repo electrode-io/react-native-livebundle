@@ -69,8 +69,8 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
   private static boolean sBundleInstalled = false;
   private static boolean sSessionStarted = false;
   private static ReactInstanceManager sReactInstanceManager;
-  private static String sAzureSasToken;
-  private static String sAzureUrl;
+  private static String sStorageUrlSuffix = "";
+  private static String sStorageUrlPrefix;
   private static ReactNativeHost sReactNativeHost;
 
   private final File mJSLiveBundleFile;
@@ -166,35 +166,24 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
    * Initialize LiveBundle
    * Should be called by client application during application start
    *
-   * @param reactNativeHost Instance of ReactNativeHost to use
-   * @param azureUrl        Azure URL
-   * @param azureSasToken   Azure SAS token (reads)
+   * @param reactNativeHost   Instance of ReactNativeHost to use
+   * @param storageUrlPrefix  Storage url prefix
+   * @param storageUrlSuffix  Storage url suffix
    */
   public static void initialize(
     ReactNativeHost reactNativeHost,
-    String azureUrl,
-    String azureSasToken) {
+    String storageUrlPrefix,
+    @Nullable String storageUrlSuffix) {
     LiveBundleModule.sReactNativeHost = reactNativeHost;
     LiveBundleModule.sReactInstanceManager = reactNativeHost.getReactInstanceManager();
-    LiveBundleModule.sAzureUrl = azureUrl;
-    LiveBundleModule.sAzureSasToken = azureSasToken;
+    LiveBundleModule.sStorageUrlPrefix = storageUrlPrefix;
+    if (sStorageUrlSuffix != null) {
+      LiveBundleModule.sStorageUrlSuffix = storageUrlSuffix;
+    }
   }
 
   public static ReactNativeHost getReactNativeHost() {
     return LiveBundleModule.sReactNativeHost;
-  }
-
-  /**
-   * Constants exposed for use by JavaScript side of the native module
-   * The JS side of the native module will make some calls to Azure using fetch
-   * so it needs the azure storage url as well the sas token
-   */
-  @Override
-  public Map<String, Object> getConstants() {
-    final Map<String, Object> constants = new HashMap<>();
-    constants.put("AZURE_SASTOKEN", sAzureSasToken);
-    constants.put("AZURE_URL", sAzureUrl);
-    return constants;
   }
 
   /**
@@ -291,25 +280,24 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
   }
 
   //===============================================================================================
-  // METHODS EXPOSED TO JS
+  // CONSTANTS EXPOSED TO JS
   //===============================================================================================
 
-  /**
-   * Returns the current LiveBundle state
-   *
-   * @param promise
-   */
-  @ReactMethod
-  public void getState(Promise promise) {
-    // Note : This could probably be simplified to keep only packageId/bundleId/sessionId
-    // as we can derive isBundleInstalled / isSessionStarted just from these values
-    WritableMap res = Arguments.createMap();
-    res.putBoolean("isBundleInstalled", LiveBundleModule.sBundleInstalled);
-    res.putBoolean("isSessionStarted", LiveBundleModule.sSessionStarted);
-    res.putString("packageId", LiveBundleModule.sPackageId);
-    res.putString("bundleId", LiveBundleModule.sBundleId);
-    promise.resolve(res);
+  @Override
+  public Map<String, Object> getConstants() {
+    final Map<String, Object> constants = new HashMap<>();
+    constants.put("STORAGE_URL_PREFIX", sStorageUrlPrefix);
+    constants.put("STORAGE_URL_SUFFIX", sStorageUrlSuffix);
+    constants.put("PACKAGE_ID", sPackageId);
+    constants.put("BUNDLE_ID", sBundleId);
+    constants.put("IS_BUNDLE_INSTALLED", sBundleInstalled);
+    constants.put("IS_SESSION_STARTED", sSessionStarted);
+    return constants;
   }
+
+  //===============================================================================================
+  // METHODS EXPOSED TO JS
+  //===============================================================================================
 
   /**
    * Starts LiveBundleActivity containing the LiveBundleUI RN component (LiveBundle menu screen)
@@ -432,7 +420,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
         }
       },
       mJSLiveBundleZipFile,
-      String.format("%spackages/%s/%s%s", sAzureUrl, packageId, bundleId, sAzureSasToken),
+      String.format("%spackages/%s/%s%s", sStorageUrlPrefix, packageId, bundleId, sStorageUrlSuffix),
       bundleInfo);
   }
 
