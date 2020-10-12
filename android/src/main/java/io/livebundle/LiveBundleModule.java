@@ -22,7 +22,12 @@ import com.facebook.react.devsupport.BundleDownloader;
 
 import androidx.annotation.Nullable;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -49,6 +54,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
   private static final String JS_LIVEBUNDLE_ZIP_FILE_NAME = "LiveBundle.zip";
   private static final int CONNECT_TIMEOUT_MS = 5000;
   private static final String E_BUNDLE_DOWNLOAD_ERROR = "E_BUNDLE_DOWNLOAD_ERROR";
+  private static final String E_METADATA_REQUEST_ERROR = "E_METADATA_REQUEST_ERROR";
   private static final String E_LIVEBUNDLE_ERROR = "E_LIVEBUNDLE_ERROR";
   private static final String PREFS_DEBUG_SERVER_HOST_KEY = "debug_http_host";
   private static final String PREFS_DEBUG_SERVER_HOST_KEY_BACKUP = "debug_http_host_backup";
@@ -73,6 +79,12 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
   private final BundleDownloader mBundleDownloader;
   private final SharedPreferences mPreferences;
   private final String mApplicationPackageName;
+  private final OkHttpClient mOkHttpClient;
+
+  enum LB_DATA_TYPE {
+    PACKAGE,
+    SESSION,
+  }
 
   /**
    * LiveBundle constructor
@@ -88,7 +100,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
 
     //
     // Create the OkHttp client to be used to download LiveBundle bundles
-    OkHttpClient mOkHttpClient = new OkHttpClient.Builder()
+    mOkHttpClient = new OkHttpClient.Builder()
       .connectTimeout(CONNECT_TIMEOUT_MS, TimeUnit.MILLISECONDS)
       .readTimeout(0, TimeUnit.MILLISECONDS)
       .writeTimeout(0, TimeUnit.MILLISECONDS)
@@ -154,9 +166,9 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
    * Initialize LiveBundle
    * Should be called by client application during application start
    *
-   * @param reactNativeHost   Instance of ReactNativeHost to use
-   * @param azureUrl          Azure URL
-   * @param azureSasToken     Azure SAS token (reads)
+   * @param reactNativeHost Instance of ReactNativeHost to use
+   * @param azureUrl        Azure URL
+   * @param azureSasToken   Azure SAS token (reads)
    */
   public static void initialize(
     ReactNativeHost reactNativeHost,
@@ -246,6 +258,33 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
     return LiveBundleModule.sReactInstanceManager;
   }
 
+  private void getMetadata(LB_DATA_TYPE type, String id, final Promise promise) {
+    String metadataUrl = String.format(
+      "%s%s/%s/%s%s",
+      sAzureUrl,
+      type == LB_DATA_TYPE.PACKAGE ? "packages" : "sessions",
+      id,
+      "metadata.json",
+      sAzureSasToken);
+
+    Request request = new Request.Builder()
+      .url(metadataUrl)
+      .build();
+
+    Call call = mOkHttpClient.newCall(request);
+    call.enqueue(new Callback() {
+      public void onResponse(Call call, Response response)
+        throws IOException {
+        String res = response.body().string();
+        promise.resolve(res);
+      }
+
+      public void onFailure(Call call, IOException e) {
+        promise.reject(E_METADATA_REQUEST_ERROR, e);
+      }
+    });
+  }
+
   @Override
   public String getName() {
     return "LiveBundle";
@@ -285,6 +324,24 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
     if (promise != null) {
       promise.resolve(null);
     }
+  }
+
+  /**
+   * Returns the metadata associated to a given package
+   * @param packageId id of the package
+   */
+  @ReactMethod
+  public void getPackageMetadata(String packageId, final Promise promise) {
+    getMetadata(LB_DATA_TYPE.PACKAGE, packageId, promise);
+  }
+
+  /**
+   * Returns the metadata associated to a given session
+   * @param sessionId id of the session
+   */
+  @ReactMethod
+  public void getSessionMetadata(String sessionId, final Promise promise) {
+    getMetadata(LB_DATA_TYPE.SESSION, sessionId, promise);
   }
 
   /**

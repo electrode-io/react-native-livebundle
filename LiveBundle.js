@@ -47,41 +47,23 @@ export class LiveBundle {
   }
 
   /**
-   * Retrieves metadata of a LiveBundle package
+   * Gets the metadata associated to a LiveBundle package
    * @param {string} packageId The id of the package
    */
   async getPackageMetadata(packageId) {
     console.log(`[LiveBundle] getPackageMetadata(${packageId})`);
-    const res = await fetch(
-      this.getAzureUrl(`packages/${packageId}/metadata.json`)
-    );
-    if (!res.ok) {
-      throw new Error(
-        `[LiveBundle] getPackageMetadata request failed : ${res.status} ${(
-          await res.text()
-        ).toString()}`
-      );
-    }
-    return res.json();
+    const res =  await NativeModules.LiveBundle.getPackageMetadata(packageId);
+    return JSON.parse(res);
   }
 
   /**
-   * Retrieves metadata of a LiveBundle live session
+   * Gets the metadata associated to a LiveBundle session
    * @param {string} sessionId The id of the session
    */
-  async getLiveSessionMetadata(sessionId) {
-    console.log(`[LiveBundle] getLiveSessionMetadata(${sessionId})`);
-    const res = await fetch(
-      this.getAzureUrl(`sessions/${sessionId}/metadata.json`)
-    );
-    if (!res.ok) {
-      throw new Error(
-        `[LiveBundle] getLiveSessionMetadata request failed : ${res.status} ${(
-          await res.text()
-        ).toString()}`
-      );
-    }
-    return res.json();
+  async getSessionMetadata(sessionId) {
+    console.log(`[LiveBundle] getSessionMetadata(${sessionId})`);
+    const res =  await NativeModules.LiveBundle.getSessionMetadata(packageId);
+    return JSON.parse(res);
   }
 
   /**
@@ -118,7 +100,7 @@ export class LiveBundle {
    */
   async launchLiveSession(sessionId) {
     console.log(`[LiveBundle] launchLiveSession(${sessionId})`);
-    const pkgMetadata = await this.getLiveSessionMetadata(sessionId);
+    const pkgMetadata = await this.getSessionMetadata(sessionId);
     return NativeModules.LiveBundle.launchLiveSession(pkgMetadata.host);
   }
 
