@@ -11,6 +11,7 @@
 #import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
+#import <react-native-livebundle/LiveBundle.h>
 
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
@@ -31,6 +32,9 @@ static void InitializeFlipper(UIApplication *application) {
   InitializeFlipper(application);
 #endif
 
+  [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"packageIdKey"];
+  [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"bundleIdKey"];
+  [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isBundleInstalledKey"];
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"example"
@@ -41,7 +45,8 @@ static void InitializeFlipper(UIApplication *application) {
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
-  self.window.rootViewController = rootViewController;
+  UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
+  self.window.rootViewController = navController;
   [self.window makeKeyAndVisible];
   return YES;
 }
@@ -51,7 +56,8 @@ static void InitializeFlipper(UIApplication *application) {
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 #else
-  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  NSURL *url = [[NSBundle mainBundle] URLForResource:@"livebundle" withExtension:@"js"];
+  return url;
 #endif
 }
 
