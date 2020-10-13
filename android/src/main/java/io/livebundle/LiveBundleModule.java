@@ -50,8 +50,8 @@ import java.util.zip.ZipInputStream;
 import android.util.Log;
 
 public class LiveBundleModule extends ReactContextBaseJavaModule {
-  private static final String JS_LIVEBUNDLE_FILE_NAME = "LiveBundle.js";
-  private static final String JS_LIVEBUNDLE_ZIP_FILE_NAME = "LiveBundle.zip";
+  private static final String JS_LIVEBUNDLE_FILE_NAME = "LB-Bundle.js";
+  private static final String JS_LIVEBUNDLE_ZIP_FILE_NAME = "LB-Bundle.zip";
   private static final int CONNECT_TIMEOUT_MS = 5000;
   private static final String E_BUNDLE_DOWNLOAD_ERROR = "E_BUNDLE_DOWNLOAD_ERROR";
   private static final String E_METADATA_REQUEST_ERROR = "E_METADATA_REQUEST_ERROR";
@@ -187,7 +187,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
   }
 
   /**
-   * Unzips the current LiveBundle zipped bundle (LiveBundle.zip) to target file (LiveBundle.js)
+   * Unzips the current LiveBundle zipped bundle (LB-Bundle.zip) to target file (LB-Bundle.js)
    *
    * @throws IOException
    */
