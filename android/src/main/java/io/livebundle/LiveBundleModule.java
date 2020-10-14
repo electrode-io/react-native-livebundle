@@ -247,33 +247,6 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
     return LiveBundleModule.sReactInstanceManager;
   }
 
-  private void getMetadata(LB_DATA_TYPE type, String id, final Promise promise) {
-    String metadataUrl = String.format(
-      "%s%s/%s/%s%s",
-      sAzureUrl,
-      type == LB_DATA_TYPE.PACKAGE ? "packages" : "sessions",
-      id,
-      "metadata.json",
-      sAzureSasToken);
-
-    Request request = new Request.Builder()
-      .url(metadataUrl)
-      .build();
-
-    Call call = mOkHttpClient.newCall(request);
-    call.enqueue(new Callback() {
-      public void onResponse(Call call, Response response)
-        throws IOException {
-        String res = response.body().string();
-        promise.resolve(res);
-      }
-
-      public void onFailure(Call call, IOException e) {
-        promise.reject(E_METADATA_REQUEST_ERROR, e);
-      }
-    });
-  }
-
   @Override
   public String getName() {
     return "LiveBundle";
@@ -312,24 +285,6 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
     if (promise != null) {
       promise.resolve(null);
     }
-  }
-
-  /**
-   * Returns the metadata associated to a given package
-   * @param packageId id of the package
-   */
-  @ReactMethod
-  public void getPackageMetadata(String packageId, final Promise promise) {
-    getMetadata(LB_DATA_TYPE.PACKAGE, packageId, promise);
-  }
-
-  /**
-   * Returns the metadata associated to a given session
-   * @param sessionId id of the session
-   */
-  @ReactMethod
-  public void getSessionMetadata(String sessionId, final Promise promise) {
-    getMetadata(LB_DATA_TYPE.SESSION, sessionId, promise);
   }
 
   /**
