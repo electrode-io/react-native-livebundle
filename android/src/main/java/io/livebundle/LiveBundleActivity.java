@@ -56,7 +56,7 @@ public class LiveBundleActivity extends ReactActivity {
     return new ReactActivityDelegate(this, getMainComponentName()) {
       @Override
       protected ReactNativeHost getReactNativeHost() {
-        return LiveBundleModule.getReactNativeHost();
+        return LiveBundle.getReactNativeHost();
       }
 
       @Nullable

@@ -49,7 +49,7 @@ import java.util.zip.ZipInputStream;
 
 import android.util.Log;
 
-public class LiveBundleModule extends ReactContextBaseJavaModule {
+public class LiveBundle extends ReactContextBaseJavaModule {
   private static final String JS_LIVEBUNDLE_FILE_NAME = "LB-Bundle.js";
   private static final String JS_LIVEBUNDLE_ZIP_FILE_NAME = "LB-Bundle.zip";
   private static final int CONNECT_TIMEOUT_MS = 5000;
@@ -58,7 +58,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
   private static final String E_LIVEBUNDLE_ERROR = "E_LIVEBUNDLE_ERROR";
   private static final String PREFS_DEBUG_SERVER_HOST_KEY = "debug_http_host";
   private static final String PREFS_DEBUG_SERVER_HOST_KEY_BACKUP = "debug_http_host_backup";
-  private static final String TAG = "LiveBundleModule";
+  private static final String TAG = "LiveBundle";
 
   //
   // Keep the following variables static so that they are preserved
@@ -93,7 +93,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
    *
    * @param reactContext The React context
    */
-  public LiveBundleModule(ReactApplicationContext reactContext) {
+  public LiveBundle(ReactApplicationContext reactContext) {
     super(reactContext);
 
     Log.d(TAG, "ctor");
@@ -141,11 +141,11 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
     // to switching to LiveBundle context (package or session)
     try {
       // Only backup if not currently in LiveBundle context (package or session)
-      if (!LiveBundleModule.sBundleInstalled && !LiveBundleModule.sSessionStarted) {
+      if (!LiveBundle.sBundleInstalled && !LiveBundle.sSessionStarted) {
         final ReactInstanceManager instanceManager = getInstanceManager();
         Field bundleLoaderField = instanceManager.getClass().getDeclaredField("mBundleLoader");
         bundleLoaderField.setAccessible(true);
-        LiveBundleModule.sInitialJsBundleLoader = (JSBundleLoader) bundleLoaderField.get(instanceManager);
+        LiveBundle.sInitialJsBundleLoader = (JSBundleLoader) bundleLoaderField.get(instanceManager);
       }
     } catch (Exception e) {
     }
@@ -174,16 +174,16 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
     ReactNativeHost reactNativeHost,
     String storageUrlPrefix,
     @Nullable String storageUrlSuffix) {
-    LiveBundleModule.sReactNativeHost = reactNativeHost;
-    LiveBundleModule.sReactInstanceManager = reactNativeHost.getReactInstanceManager();
-    LiveBundleModule.sStorageUrlPrefix = storageUrlPrefix;
+    LiveBundle.sReactNativeHost = reactNativeHost;
+    LiveBundle.sReactInstanceManager = reactNativeHost.getReactInstanceManager();
+    LiveBundle.sStorageUrlPrefix = storageUrlPrefix;
     if (sStorageUrlSuffix != null) {
-      LiveBundleModule.sStorageUrlSuffix = storageUrlSuffix;
+      LiveBundle.sStorageUrlSuffix = storageUrlSuffix;
     }
   }
 
   public static ReactNativeHost getReactNativeHost() {
-    return LiveBundleModule.sReactNativeHost;
+    return LiveBundle.sReactNativeHost;
   }
 
   /**
@@ -244,7 +244,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
     ReactApplication reactApplication = (ReactApplication) currentActivity.getApplication();
     return reactApplication.getReactNativeHost().getReactInstanceManager();
     */
-    return LiveBundleModule.sReactInstanceManager;
+    return LiveBundle.sReactInstanceManager;
   }
 
   @Override
@@ -306,7 +306,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
       Field bundleLoaderField = instanceManager.getClass().getDeclaredField("mBundleLoader");
       bundleLoaderField.setAccessible(true);
       bundleLoaderField.set(instanceManager, null);
-      LiveBundleModule.sSessionStarted = true;
+      LiveBundle.sSessionStarted = true;
     } catch (Exception e) {
       Log.e(TAG, "launchLiveSession", e);
       promise.reject(E_LIVEBUNDLE_ERROR, e);
@@ -345,12 +345,12 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
         public void onSuccess() {
           try {
             // All bundles are zipped. Unzip the bundle to target final file location ...
-            LiveBundleModule.this.unzipLiveBundleZipFile();
+            LiveBundle.this.unzipLiveBundleZipFile();
             // ... and trash  the zip file
             mJSLiveBundleZipFile.delete();
             // Update current packageId/bundleId
-            LiveBundleModule.sPackageId = packageId;
-            LiveBundleModule.sBundleId = bundleId;
+            LiveBundle.sPackageId = packageId;
+            LiveBundle.sBundleId = bundleId;
             // Resolve promise, we're done with download !
             promise.resolve(null);
 
@@ -427,19 +427,19 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
             Method recreateMethod = instanceManager.getClass().getDeclaredMethod("recreateReactContextInBackgroundFromBundleLoader");
             recreateMethod.setAccessible(true);
             recreateMethod.invoke(instanceManager);
-            LiveBundleModule.sBundleInstalled = true;
+            LiveBundle.sBundleInstalled = true;
           } catch (Exception e) {
             Log.e(TAG, "installBundle error [A]", e);
-            LiveBundleModule.this.reset(null);
-            LiveBundleModule.sBundleInstalled = false;
+            LiveBundle.this.reset(null);
+            LiveBundle.sBundleInstalled = false;
             promise.reject(E_LIVEBUNDLE_ERROR, e);
           }
         }
       });
     } catch (Exception e) {
       Log.e(TAG, "installBundle error [B]", e);
-      LiveBundleModule.this.reset(null);
-      LiveBundleModule.sBundleInstalled = false;
+      LiveBundle.this.reset(null);
+      LiveBundle.sBundleInstalled = false;
       promise.reject(E_LIVEBUNDLE_ERROR, e);
     }
   }
@@ -461,7 +461,7 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
       final ReactInstanceManager instanceManager = getInstanceManager();
       Field bundleLoaderField = instanceManager.getClass().getDeclaredField("mBundleLoader");
       bundleLoaderField.setAccessible(true);
-      bundleLoaderField.set(instanceManager, LiveBundleModule.sInitialJsBundleLoader);
+      bundleLoaderField.set(instanceManager, LiveBundle.sInitialJsBundleLoader);
 
       //
       // Restore the debug server host
@@ -494,10 +494,10 @@ public class LiveBundleModule extends ReactContextBaseJavaModule {
         promise.reject(E_LIVEBUNDLE_ERROR, e);
       }
     } finally {
-      LiveBundleModule.sPackageId = null;
-      LiveBundleModule.sBundleId = null;
-      LiveBundleModule.sBundleInstalled = false;
-      LiveBundleModule.sSessionStarted = false;
+      LiveBundle.sPackageId = null;
+      LiveBundle.sBundleId = null;
+      LiveBundle.sBundleInstalled = false;
+      LiveBundle.sSessionStarted = false;
     }
   }
 }
