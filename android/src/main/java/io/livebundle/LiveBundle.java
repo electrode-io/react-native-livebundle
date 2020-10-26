@@ -69,7 +69,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
   private static boolean sBundleInstalled = false;
   private static boolean sSessionStarted = false;
   private static ReactInstanceManager sReactInstanceManager;
-  private static String sStorageUrlSuffix = "";
+  private static String sStorageUrlSuffix;
   private static String sStorageUrlPrefix;
   private static ReactNativeHost sReactNativeHost;
 
@@ -375,7 +375,11 @@ public class LiveBundle extends ReactContextBaseJavaModule {
         }
       },
       mJSLiveBundleZipFile,
-      String.format("%spackages/%s/%s%s", sStorageUrlPrefix, packageId, bundleId, sStorageUrlSuffix),
+      String.format("%spackages/%s/%s%s",
+        sStorageUrlPrefix,
+        packageId,
+        bundleId,
+        sStorageUrlSuffix == null ? "" : sStorageUrlSuffix),
       bundleInfo);
   }
 
