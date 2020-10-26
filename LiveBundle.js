@@ -38,7 +38,7 @@ export class LiveBundle {
    * @param {string} resourcePath Path to resource
    */
   getUrl(resourcePath) {
-    return `${this.STORAGE_URL}${resourcePath}${this.STORAGE_URL_SUFFIX ?? ""}`;
+    return `${this.STORAGE_URL}/${resourcePath}${this.STORAGE_URL_SUFFIX ?? ""}`;
   }
 
   /**
