@@ -69,8 +69,8 @@ public class LiveBundle extends ReactContextBaseJavaModule {
   private static boolean sBundleInstalled = false;
   private static boolean sSessionStarted = false;
   private static ReactInstanceManager sReactInstanceManager;
+  private static String storageUrl;
   private static String sStorageUrlSuffix;
-  private static String sStorageUrlPrefix;
   private static ReactNativeHost sReactNativeHost;
 
   private final File mJSLiveBundleFile;
@@ -167,16 +167,16 @@ public class LiveBundle extends ReactContextBaseJavaModule {
    * Should be called by client application during application start
    *
    * @param reactNativeHost   Instance of ReactNativeHost to use
-   * @param storageUrlPrefix  Storage url prefix
+   * @param storageUrl        Storage url
    * @param storageUrlSuffix  Storage url suffix
    */
   public static void initialize(
     ReactNativeHost reactNativeHost,
-    String storageUrlPrefix,
+    String storageUrl,
     @Nullable String storageUrlSuffix) {
     LiveBundle.sReactNativeHost = reactNativeHost;
     LiveBundle.sReactInstanceManager = reactNativeHost.getReactInstanceManager();
-    LiveBundle.sStorageUrlPrefix = storageUrlPrefix;
+    LiveBundle.sStorageUrl = storageUrl;
     if (sStorageUrlSuffix != null) {
       LiveBundle.sStorageUrlSuffix = storageUrlSuffix;
     }
@@ -259,7 +259,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
   @Override
   public Map<String, Object> getConstants() {
     final Map<String, Object> constants = new HashMap<>();
-    constants.put("STORAGE_URL_PREFIX", sStorageUrlPrefix);
+    constants.put("STORAGE_URL", storageUrl);
     constants.put("STORAGE_URL_SUFFIX", sStorageUrlSuffix);
     constants.put("PACKAGE_ID", sPackageId);
     constants.put("BUNDLE_ID", sBundleId);
@@ -376,7 +376,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
       },
       mJSLiveBundleZipFile,
       String.format("%spackages/%s/%s%s",
-        sStorageUrlPrefix,
+        storageUrl,
         packageId,
         bundleId,
         sStorageUrlSuffix == null ? "" : sStorageUrlSuffix),

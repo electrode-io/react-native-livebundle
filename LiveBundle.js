@@ -10,7 +10,7 @@ export class LiveBundle {
     console.log("[LiveBundle] initialize()");
     if (!this.isInitialized) {
       const nm = NativeModules.LiveBundle;
-      this.STORAGE_URL_PREFIX = nm.STORAGE_URL_PREFIX;
+      this.STORAGE_URL = nm.STORAGE_URL;
       this.STORAGE_URL_SUFFIX = nm.STORAGE_URL_SUFFIX;
       this.PACKAGE_ID = nm.PACKAGE_ID;
       this.BUNDLE_ID = nm.BUNDLE_ID;
@@ -38,7 +38,7 @@ export class LiveBundle {
    * @param {string} resourcePath Path to resource
    */
   getUrl(resourcePath) {
-    return `${this.STORAGE_URL_PREFIX}${resourcePath}${this.STORAGE_URL_SUFFIX ?? ""}`;
+    return `${this.STORAGE_URL}${resourcePath}${this.STORAGE_URL_SUFFIX ?? ""}`;
   }
 
   /**
