@@ -176,7 +176,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
     @Nullable String storageUrlSuffix) {
     LiveBundle.sReactNativeHost = reactNativeHost;
     LiveBundle.sReactInstanceManager = reactNativeHost.getReactInstanceManager();
-    LiveBundle.sStorageUrl = storageUrl;
+    LiveBundle.sStorageUrl = storageUrl.replaceAll("/$", "");
     if (sStorageUrlSuffix != null) {
       LiveBundle.sStorageUrlSuffix = storageUrlSuffix;
     }
@@ -375,7 +375,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
         }
       },
       mJSLiveBundleZipFile,
-      String.format("%spackages/%s/%s%s",
+      String.format("%s/packages/%s/%s%s",
         storageUrl,
         packageId,
         bundleId,
