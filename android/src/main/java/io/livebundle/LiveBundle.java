@@ -69,7 +69,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
   private static boolean sBundleInstalled = false;
   private static boolean sSessionStarted = false;
   private static ReactInstanceManager sReactInstanceManager;
-  private static String storageUrl;
+  private static String sStorageUrl;
   private static String sStorageUrlSuffix;
   private static ReactNativeHost sReactNativeHost;
 
@@ -259,7 +259,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
   @Override
   public Map<String, Object> getConstants() {
     final Map<String, Object> constants = new HashMap<>();
-    constants.put("STORAGE_URL", storageUrl);
+    constants.put("STORAGE_URL", sStorageUrl);
     constants.put("STORAGE_URL_SUFFIX", sStorageUrlSuffix);
     constants.put("PACKAGE_ID", sPackageId);
     constants.put("BUNDLE_ID", sBundleId);
@@ -376,7 +376,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
       },
       mJSLiveBundleZipFile,
       String.format("%s/packages/%s/%s%s",
-        storageUrl,
+        sStorageUrl,
         packageId,
         bundleId,
         sStorageUrlSuffix == null ? "" : sStorageUrlSuffix),
