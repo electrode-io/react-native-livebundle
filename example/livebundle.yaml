@@ -8,9 +8,8 @@ bundler:
 
 # Storage
 storage:
-  azure:
-    accountUrl: https://02513afc7fstg.blob.core.windows.net
-    container: demo
+  fs:
+    storageDir: ~/.livebundle/storage
 
 # Generators
 generators:
