@@ -9,7 +9,12 @@
 
 ## Trying it out
 
-**Unless mentionned otherwise, all following commands should be run fom the this directory \*(the `example` directory)**
+**Unless mentionned otherwise, all following commands should be run fom the this directory _(the `example` directory)_**
+
+### Initial Setup
+
+- Clone this repository on your workstation
+- **From the `example` directory**, run `yarn install`<br/>**_!! Do not run this command from the top level directory!!_**
 
 ### Upload an application change
 
