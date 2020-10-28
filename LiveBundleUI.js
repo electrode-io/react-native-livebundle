@@ -249,8 +249,8 @@ export class LiveBundleUI extends Component<{}> {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "rgb(65,136,214)",
-    borderColor: "rgb(25,96,174)",
+    backgroundColor: "#4188D6",
+    borderColor: "#1960ae",
     borderRadius: 3,
     borderWidth: 0.3,
     alignItems: "center",
