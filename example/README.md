@@ -59,7 +59,9 @@ $ adb shell am start -W -a android.intent.action.VIEW -d "[DEEP_LINK_URL]" io.li
 
 Just replace `[DEEP_LINK_URL]` with your Deep Link url.
 
-### Trying Reset
+### Try Reset
+
+To rollback the update, just tap the `Reset` button from LiveBundle menu.
 
 ## Development/Debbuging
 
