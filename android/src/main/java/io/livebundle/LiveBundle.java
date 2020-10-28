@@ -177,7 +177,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
     LiveBundle.sReactNativeHost = reactNativeHost;
     LiveBundle.sReactInstanceManager = reactNativeHost.getReactInstanceManager();
     LiveBundle.sStorageUrl = storageUrl.replaceAll("/$", "");
-    if (sStorageUrlSuffix != null) {
+    if (storageUrlSuffix != null) {
       LiveBundle.sStorageUrlSuffix = storageUrlSuffix;
     }
   }
