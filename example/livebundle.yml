@@ -1,13 +1,6 @@
 # JavaScript bundler
 bundler:
   metro:
-    bundles:
-      - dev: true
-        entry: index.js
-        platform: android
-      - dev: true
-        entry: index.js
-        platform: ios
 
 # Storage
 storage:
