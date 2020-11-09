@@ -3,6 +3,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import <React/RCTLinkingManager.h>
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -32,9 +33,6 @@ static void InitializeFlipper(UIApplication *application) {
   InitializeFlipper(application);
 #endif
 
-  [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"packageIdKey"];
-  [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"bundleIdKey"];
-  [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isBundleInstalledKey"];
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"example"
@@ -50,6 +48,13 @@ static void InitializeFlipper(UIApplication *application) {
   [self.window makeKeyAndVisible];
   return YES;
 }
+
+//- (BOOL)application:(UIApplication *)application
+//   openURL:(NSURL *)url
+//   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+//{
+//  return [RCTLinkingManager application:application openURL:url options:options];
+//}
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {

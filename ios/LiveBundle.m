@@ -52,6 +52,11 @@ RCT_EXPORT_MODULE()
   return YES;
 }
 
+- (void)setBridge:(RCTBridge *)bridge
+{
+  _bridge = bridge;
+}
+
 RCT_EXPORT_METHOD(getState:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject) {
     NSDictionary *state = @{@"isBundleInstalled": [NSNumber numberWithBool:isBundleInstalled], @"isSessionStarted": [NSNumber numberWithBool:isSessionStarted], @"packageId": packageId, @"bundleId": bundleId};
     resolve(@[state]);
@@ -59,6 +64,10 @@ RCT_EXPORT_METHOD(getState:(RCTPromiseResolveBlock)resolve reject:(__unused RCTP
 
 RCT_EXPORT_METHOD(launchUI:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (![jsPath  isEqual: @""]) {
+        NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:jsPath];
+        [self->_bridge.parentBridge setBundleURL:bundleURL];
+    }
         RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:self->_bridge
                                                          moduleName:@"LiveBundleUI"
                                                   initialProperties:nil];
@@ -107,7 +116,7 @@ RCT_EXPORT_METHOD(reset:(RCTPromiseResolveBlock)resolve reject:(__unused RCTProm
             NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:jsPath];
             [self->_bridge setBundleURL:bundleURL];
         }
-        [self->_bridge reload];
+        [self->_bridge.parentBridge reload];
         });
 }
 
