@@ -60,7 +60,7 @@
 			<string>com.walmart.electrodenative</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>example</string>
+				<string>livebundle</string>
 			</array>
 		</dict>
 	</array>

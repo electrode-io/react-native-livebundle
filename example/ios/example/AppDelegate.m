@@ -49,12 +49,12 @@ static void InitializeFlipper(UIApplication *application) {
   return YES;
 }
 
-//- (BOOL)application:(UIApplication *)application
-//   openURL:(NSURL *)url
-//   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
-//{
-//  return [RCTLinkingManager application:application openURL:url options:options];
-//}
+- (BOOL)application:(UIApplication *)application
+   openURL:(NSURL *)url
+   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [RCTLinkingManager application:application openURL:url options:options];
+}
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
