@@ -61,7 +61,7 @@ static void InitializeFlipper(UIApplication *application) {
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 #else
-  NSURL *url = [[NSBundle mainBundle] URLForResource:@"livebundle" withExtension:@"js"];
+  NSURL *url = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   return url;
 #endif
 }
