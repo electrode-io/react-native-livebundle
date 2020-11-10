@@ -3,6 +3,7 @@
 #import <React/RCTBridge+Private.h>
 #import <React/RCTBundleURLProvider.h>
 #import <UIKit/UIKit.h>
+#import <React/RCTReloadCommand.h>
 
 #if __has_include(<React/RCTRootView.h>)
 #import <React/RCTRootView.h>
@@ -92,7 +93,7 @@ RCT_EXPORT_METHOD(reset:(RCTPromiseResolveBlock)resolve reject:(__unused RCTProm
 #endif
         [self->_bridge setBundleURL: url];
         [self->_rootVC popViewControllerAnimated:NO];
-        [self->_bridge.parentBridge reload];
+        RCTTriggerReloadCommandListeners(@"reset bridge");
         resolve(nil);
     });
 }
@@ -116,7 +117,7 @@ RCT_EXPORT_METHOD(reset:(RCTPromiseResolveBlock)resolve reject:(__unused RCTProm
             NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:jsPath];
             [self->_bridge setBundleURL:bundleURL];
         }
-        [self->_bridge.parentBridge reload];
+        RCTTriggerReloadCommandListeners(@"install new bundle");
         });
 }
 
