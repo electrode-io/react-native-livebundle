@@ -1,4 +1,4 @@
-import { NativeModules, Platform } from "react-native";
+import { NativeModules, Platform, Linking } from "react-native";
 import { setCustomSourceTransformer } from "react-native/Libraries/Image/resolveAssetSource";
 
 export class LiveBundle {
@@ -30,6 +30,11 @@ export class LiveBundle {
         });
       }
       this.isInitialized = true;
+    }
+    if (Platform.OS === 'ios') {
+      Linking.getInitialURL().then(url => {
+        url && this.launchUIFromDeepLink(url);
+      })
     }
   }
 
@@ -82,9 +87,32 @@ export class LiveBundle {
   /**
    * Launches LiveBundle UI
    */
-  launchUI() {
+  launchUI(props) {
     console.log("[LiveBundle] launchUI()");
-    NativeModules.LiveBundle.launchUI();
+    NativeModules.LiveBundle.launchUI(props);
+  }
+
+  /**
+   * Launches LiveBundle UI from Deep Link URL
+   */
+  launchUIFromDeepLink(deepLinkUrl) {
+    console.log(`[LiveBundle] launchUIFromDeepLink(${deepLinkUrl})`);
+    if (deepLinkUrl === 'livebundle://menu') {
+      return this.launchUI();
+    }
+    const reurl = /livebundle:\/\/(sessions|packages)\?id=(.+)/;
+    const capture = reurl.exec(deepLinkUrl);
+    if (capture) {
+      const [,host, id] = capture;
+      switch (host) {
+        case 'packages':
+          this.launchUI({packageId: id});
+          break;
+        case 'sessions':
+          this.launchUI({sessionId: id});
+          break;
+      }
+    }
   }
 
   /**
@@ -167,3 +195,9 @@ export class LiveBundle {
 
 const livebundle = new LiveBundle();
 export default livebundle;
+
+if (Platform.OS === 'ios') {
+  Linking.addEventListener('url', ({url}) => {
+    livebundle.launchUIFromDeepLink(url)
+  })
+}

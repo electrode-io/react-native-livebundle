@@ -62,7 +62,7 @@ RCT_EXPORT_METHOD(getState:(RCTPromiseResolveBlock)resolve reject:(__unused RCTP
     resolve(@[state]);
 }
 
-RCT_EXPORT_METHOD(launchUI:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(launchUI:(NSDictionary *)props resolve:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (![jsPath  isEqual: @""]) {
         NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:jsPath];
@@ -70,7 +70,7 @@ RCT_EXPORT_METHOD(launchUI:(RCTPromiseResolveBlock)resolve reject:(__unused RCTP
     }
         RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:self->_bridge
                                                          moduleName:@"LiveBundleUI"
-                                                  initialProperties:nil];
+                                                  initialProperties:props];
         UIViewController * vc = [[UIViewController alloc] init];
         vc.view = rootView;
         [self->_rootVC pushViewController:vc animated:true];
