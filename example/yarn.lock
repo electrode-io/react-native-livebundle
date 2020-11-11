@@ -5044,10 +5044,10 @@ livebundle-storage-fs@^0.3.2:
     livebundle-sdk "^0.3.2"
     tmp "^0.2.1"
 
-livebundle@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/livebundle/-/livebundle-0.3.4.tgz#7ab5ae0bd8a16d6437b3412f540593c4d861e015"
-  integrity sha512-4JLruKLgh0mLaaVb70isAQkUhokarjoMD8QyvaG6j5PuHcv7kmzVfndetiH2eWdwINmAMvHbKXjbQBUnmy5k6g==
+livebundle@^0.3.5:
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/livebundle/-/livebundle-0.3.5.tgz#b87e86be4b4e72c0d4aff17fbdd34d86f1372c03"
+  integrity sha512-HY2+hu/Gh2rOvO6XDp5rL0t7yA/SbhD3uwHtAiXzFIfv3WH4qdSA5NG9xv8733anfuvaJk/YTKD2N0vVntCj9w==
   dependencies:
     chalk "^4.1.0"
     commander "^6.1.0"
