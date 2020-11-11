@@ -13,16 +13,15 @@
 #import "React/RCTRootView.h"   // Required when used as a Pod in a Swift project
 #endif
 
-NSString *const sStorageUrlSuffix = @"?sv=2019-12-12&ss=b&srt=co&sp=rx&se=2021-10-08T03:45:35Z&st=2020-10-07T19:45:35Z&spr=https&sig=uGzhJhkPdx%2FdYbuWdR0YSSoRBpHbWpSQsZpCyxJvtPY%3D";
-NSString *const sStorageUrl = @"https://testlivebundle.blob.core.windows.net/demo";
 NSString *const liveBundle_zip = @"LB-Bundle.zip";
 NSString *const liveBundle_js = @"LB-Bundle.js";
 
 @interface LiveBundle ()
-@property (nonatomic, strong) UINavigationController *rootVC;
 @end
 
 @implementation LiveBundle
+static NSString *sStorageUrlSuffix;
+static NSString *sStorageUrl;
 static NSString *bundleId = @"";
 static NSString *packageId = @"";
 static BOOL isBundleInstalled = NO;
@@ -30,9 +29,10 @@ static BOOL isSessionStarted = NO;
 static NSString *jsPath = @"";
 @synthesize bridge = _bridge;
 
-- (instancetype)init {
+- (instancetype)initWithstorageUrl:(NSString*)storageUrl storageUrSulffix:(NSString*)storageUrlSuffix {
     if (self = [super init]) {
-        _rootVC = (UINavigationController*)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+        sStorageUrl = storageUrl;
+        sStorageUrlSuffix = storageUrlSuffix;
     }
     return self;
 }
@@ -74,7 +74,8 @@ RCT_EXPORT_METHOD(launchUI:(NSDictionary *)props resolve:(RCTPromiseResolveBlock
                                                   initialProperties:props];
         UIViewController * vc = [[UIViewController alloc] init];
         vc.view = rootView;
-        [self->_rootVC pushViewController:vc animated:true];
+        UINavigationController *rootVC = (UINavigationController*)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+        [rootVC pushViewController:vc animated:true];
         resolve(nil);
     });
 }
@@ -92,7 +93,8 @@ RCT_EXPORT_METHOD(reset:(RCTPromiseResolveBlock)resolve reject:(__unused RCTProm
         url = [[NSBundle mainBundle] URLForResource:@"livebundle" withExtension:@"js"];
 #endif
         [self->_bridge setBundleURL: url];
-        [self->_rootVC popViewControllerAnimated:NO];
+        UINavigationController *rootVC = (UINavigationController*)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+        [rootVC popViewControllerAnimated:NO];
         RCTTriggerReloadCommandListeners(@"reset bridge");
         resolve(nil);
     });
@@ -112,7 +114,8 @@ RCT_EXPORT_METHOD(reset:(RCTPromiseResolveBlock)resolve reject:(__unused RCTProm
 
 - (void)installBundle {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self->_rootVC popViewControllerAnimated:NO];
+        UINavigationController *rootVC = (UINavigationController*)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+        [rootVC popViewControllerAnimated:NO];
         if (![jsPath  isEqual: @""]) {
             NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:jsPath];
             [self->_bridge setBundleURL:bundleURL];

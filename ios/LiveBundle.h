@@ -9,5 +9,6 @@
 #import <React/RCTBridgeModule.h>
 
 @interface LiveBundle : NSObject <RCTBridgeModule>
+- (instancetype)initWithstorageUrl:(NSString*)storageUrl storageUrSulffix:(NSString*)storageUrlSuffix;
 - (void)launchUI;
 @end
