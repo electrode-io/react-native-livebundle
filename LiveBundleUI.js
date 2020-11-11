@@ -157,16 +157,16 @@ export class LiveBundleUI extends Component<{}> {
     } else if (isDownloadCompleted) {
       // If we have a bundle ready to be installed, install
       // it and exist the menu
+      BackHandler.exitApp();
       livebundle.installBundle().catch((error) => {
         this.setState({ error });
       });
-      BackHandler.exitApp();
     } else if (sessionId) {
       // If we have a session id just launch the live session
+      BackHandler.exitApp();
       livebundle.launchLiveSession(sessionId).catch((error) => {
         this.setState({ error });
       });
-      BackHandler.exitApp();
     } else if (packageId && !packageMetadata && !bundleId) {
       // If we have a packageId but no bundleId yet then we need
       // to retrieve the package metadata to look at what bundles

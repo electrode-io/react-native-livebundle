@@ -26,6 +26,7 @@ static NSString *bundleId = @"";
 static NSString *packageId = @"";
 static BOOL isBundleInstalled = NO;
 static BOOL isSessionStarted = NO;
+static BOOL sIsInitialLaunch = YES;
 static NSString *jsPath = @"";
 @synthesize bridge = _bridge;
 
@@ -45,6 +46,7 @@ RCT_EXPORT_MODULE()
                    @"BUNDLE_ID": bundleId,
                    @"IS_BUNDLE_INSTALLED": [NSNumber numberWithBool:isBundleInstalled],
                    @"IS_SESSION_STARTED": [NSNumber numberWithBool:isSessionStarted],
+                   @"IS_INITIAL_LAUNCH": [NSNumber numberWithBool:sIsInitialLaunch]
               };
 }
 
@@ -76,6 +78,7 @@ RCT_EXPORT_METHOD(launchUI:(NSDictionary *)props resolve:(RCTPromiseResolveBlock
         vc.view = rootView;
         UINavigationController *rootVC = (UINavigationController*)[[[UIApplication sharedApplication] keyWindow] rootViewController];
         [rootVC pushViewController:vc animated:true];
+        sIsInitialLaunch = NO;
         resolve(nil);
     });
 }

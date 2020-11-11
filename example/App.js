@@ -10,7 +10,7 @@ export default class App extends Component<{}> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>LiveBundle Demo</Text>
+        <Text style={styles.welcome}>LiveBundle Demo [Foo]</Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => livebundle.launchUI()}>

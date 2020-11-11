@@ -11,6 +11,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.devsupport.interfaces.DevOptionHandler;
 
@@ -68,6 +69,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
   private static String sBundleId;
   private static boolean sBundleInstalled = false;
   private static boolean sSessionStarted = false;
+  private static boolean sIsInitialLaunch = true;
   private static ReactInstanceManager sReactInstanceManager;
   private static String sStorageUrl;
   private static String sStorageUrlSuffix;
@@ -78,7 +80,6 @@ public class LiveBundle extends ReactContextBaseJavaModule {
 
   private final BundleDownloader mBundleDownloader;
   private final SharedPreferences mPreferences;
-  private final String mApplicationPackageName;
   private final OkHttpClient mOkHttpClient;
 
   enum LB_DATA_TYPE {
@@ -112,10 +113,6 @@ public class LiveBundle extends ReactContextBaseJavaModule {
     mJSLiveBundleFile = new File(reactContext.getApplicationContext().getFilesDir(), JS_LIVEBUNDLE_FILE_NAME);
 
     //
-    // Get application package name
-    mApplicationPackageName = reactContext.getApplicationContext().getPackageName();
-
-    //
     // Create bundle downloader (to download LiveBundle bundles)
     // To make things easier, we just use the downloader shipped with React Native, but could
     // write a custom one instead at some point
@@ -131,7 +128,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
       @Override
       public void onOptionSelected() {
         // Launch LiveBundleUI component if the option is selected by the user
-        launchUI(null);
+        launchUI(null, null);
       }
     });
 
@@ -265,6 +262,7 @@ public class LiveBundle extends ReactContextBaseJavaModule {
     constants.put("BUNDLE_ID", sBundleId);
     constants.put("IS_BUNDLE_INSTALLED", sBundleInstalled);
     constants.put("IS_SESSION_STARTED", sSessionStarted);
+    constants.put("IS_INITIAL_LAUNCH", sIsInitialLaunch);
     return constants;
   }
 
@@ -276,15 +274,19 @@ public class LiveBundle extends ReactContextBaseJavaModule {
    * Starts LiveBundleActivity containing the LiveBundleUI RN component (LiveBundle menu screen)
    */
   @ReactMethod
-  public void launchUI(@Nullable Promise promise) {
+  public void launchUI(@Nullable ReadableMap props, @Nullable Promise promise) {
     Log.d(TAG, "launchUI()");
     ReactInstanceManager instanceManager = getInstanceManager();
     Intent intent = new Intent(instanceManager.getCurrentReactContext(), LiveBundleActivity.class);
+    if (props != null) {
+      intent.putExtras(Arguments.toBundle(props));
+    }
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     instanceManager.getCurrentReactContext().startActivity(intent);
     if (promise != null) {
       promise.resolve(null);
     }
+    LiveBundle.sIsInitialLaunch = false;
   }
 
   /**
@@ -407,23 +409,6 @@ public class LiveBundle extends ReactContextBaseJavaModule {
         @Override
         public void run() {
           try {
-            Context appContext = instanceManager.getCurrentReactContext().getApplicationContext();
-            Intent appLaunchIntent = appContext.getPackageManager().getLaunchIntentForPackage(mApplicationPackageName);
-
-            //
-            // Start the main activity of the client application.
-            // This is mostly solely needed when a LiveBundle bundle is installed from a deep link
-            // and the application is not yet started (COLD state).
-            // In this case, the deep link will load the LiveBundleActivity (LiveBundle menu) but
-            // once the bundle is installed, there will be no Activity to go back to.
-            // Starting the main activity of the client application prior to installing the bundle
-            // in that case, solves this problem.
-            // Because we are using FLAG_ACTIVITY_NEW_TASK, all other scenarios are also properly
-            // covered. Indeed, if the main application activity already exist, it will not be
-            // recreated, but the task its running in will be brought to front
-            appLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            appContext.getApplicationContext().startActivity(appLaunchIntent);
-
             //
             // Call recreateReactContextInBackgroundFromBundleLoader method.
             // This method should be called from the main UI thread (RN requirement).
