@@ -32,6 +32,9 @@ static void InitializeFlipper(UIApplication *application) {
 #ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
 #endif
+  NSString* storageUrlSuffix = @"?sv=2019-12-12&ss=b&srt=co&sp=rx&se=2021-10-08T03:45:35Z&st=2020-10-07T19:45:35Z&spr=https&sig=uGzhJhkPdx%2FdYbuWdR0YSSoRBpHbWpSQsZpCyxJvtPY%3D";
+  NSString *storageUrl = @"https://testlivebundle.blob.core.windows.net/demo";
+  [[LiveBundle alloc] initWithstorageUrl:storageUrl storageUrSulffix:storageUrlSuffix];
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
