@@ -30,11 +30,11 @@ export class LiveBundle {
         });
       }
       this.isInitialized = true;
-    }
-    if (Platform.OS === 'ios') {
-      Linking.getInitialURL().then(url => {
-        url && this.launchUIFromDeepLink(url);
-      })
+      if (nm.IS_INITIAL_LAUNCH) {
+        Linking.getInitialURL().then(url => {
+          url && this.launchUIFromDeepLink(url);
+        })
+      }
     }
   }
 
@@ -196,8 +196,6 @@ export class LiveBundle {
 const livebundle = new LiveBundle();
 export default livebundle;
 
-if (Platform.OS === 'ios') {
-  Linking.addEventListener('url', ({url}) => {
-    livebundle.launchUIFromDeepLink(url)
-  })
-}
+Linking.addEventListener('url', ({url}) => {
+  livebundle.launchUIFromDeepLink(url)
+})
