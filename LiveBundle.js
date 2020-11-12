@@ -80,7 +80,7 @@ export class LiveBundle {
    * Gets the metadata associated to a LiveBundle session
    * @param {string} sessionId The id of the session
    */
-  async getLiveSessionMetadata(sessionId) {
+  async getSessionMetadata(sessionId) {
     return this.getMetadata("SESSION", sessionId);
   }
 
