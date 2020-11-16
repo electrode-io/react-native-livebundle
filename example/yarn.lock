@@ -4951,67 +4951,67 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-livebundle-bundler-metro@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/livebundle-bundler-metro/-/livebundle-bundler-metro-0.3.2.tgz#c13dd93d318fa3d8fd2e05a27966a8207d6a9cf4"
-  integrity sha512-Q6O4HZRTe/4CZSVTJn3N0iEDFEa5eubpJq7P+CvyN121TTH1lHifHDU/kF6dp4RGlCRK6aJLP1ibF50pPINuRg==
+livebundle-bundler-metro@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/livebundle-bundler-metro/-/livebundle-bundler-metro-0.3.3.tgz#ede901950a5dd6cbd2b68e37ad7540f3b4a28373"
+  integrity sha512-VSAePOJRPyWajITuyPuFCG0RKh0AEqCrGlC7n1UCdkCMexYKnoHmznYm5yLsxJERUVykZRXzoyh69ecnv8zI6A==
   dependencies:
     debug "^4.2.0"
     fs-extra "^9.0.1"
-    livebundle-sdk "^0.3.2"
+    livebundle-sdk "^0.3.3"
     tmp "^0.2.1"
 
-livebundle-generator-deeplink@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/livebundle-generator-deeplink/-/livebundle-generator-deeplink-0.3.2.tgz#761e64f199756589041a44ab902da6539b1a8dae"
-  integrity sha512-MUqi4FXQ/D+ZwFnB+hIjiXTA5tXUps/1aLcAi9ZiGTdZgxTJ+svyDrZO+ZSZ1EQWkmA5/+6xbTQFs1KLF4SjHw==
-  dependencies:
-    debug "^4.2.0"
-    livebundle-sdk "^0.3.2"
-
-livebundle-generator-qrcode@^0.3.3:
+livebundle-generator-deeplink@^0.3.3:
   version "0.3.3"
-  resolved "https://registry.yarnpkg.com/livebundle-generator-qrcode/-/livebundle-generator-qrcode-0.3.3.tgz#77b4bdd2077b666d8eca1e0ba0a2251b6bffaaf8"
-  integrity sha512-ieOM4WbtmVP29zF+RjPnYP2xXlKKn6PNWRliHVGsjiRLhqN3BQrXqw+3kIlB7Oc01vL+YttjP/loXJxJ4UvUHw==
+  resolved "https://registry.yarnpkg.com/livebundle-generator-deeplink/-/livebundle-generator-deeplink-0.3.3.tgz#e567ac5cdf23d25867c784cdfe3deafd182b676c"
+  integrity sha512-yoHlZYNJyOzoetF93pLyS1Fvnf0U92oI6vtfm895ZIo6TnO+A13+t/ToLGhpAXv96GgU6ftpxc2gZXVm+NYQqg==
   dependencies:
     debug "^4.2.0"
-    livebundle-sdk "^0.3.2"
+    livebundle-sdk "^0.3.3"
+
+livebundle-generator-qrcode@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/livebundle-generator-qrcode/-/livebundle-generator-qrcode-0.3.4.tgz#6580631fb4d55218f479ec83dc4f8dcccebc3c34"
+  integrity sha512-ULIpPCKEeUSOfTi3ZZKs0UBSl96OSxzvZuHbjik29jVWGJBJTBuoCwiH7sjxfO9TGLH13+RIj1LMmD61xZqxBA==
+  dependencies:
+    debug "^4.2.0"
+    livebundle-sdk "^0.3.3"
     qrcode "^1.4.4"
 
-livebundle-notifier-github@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/livebundle-notifier-github/-/livebundle-notifier-github-0.3.2.tgz#ec27fd335d8f91e6735ab1871d19ae22400a4860"
-  integrity sha512-cdRpIQft4gx6Ci8XHTRPwQ/Dul6kRM2YkIFaIES++4XHpEDCjsNUIVq6xuttu+EnXi1FyP2jdlE4AKBPYrhLEg==
+livebundle-notifier-github@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/livebundle-notifier-github/-/livebundle-notifier-github-0.3.3.tgz#4cf112c13b4e15bbcc28ed07eb6dc9e257c69498"
+  integrity sha512-rAfjSB8rEZMzrzEAAux3LBQlwlGWNhWjdZZ1Zhw0dtZJZj/Qh/7KeGUjYaWghHWdKTf00R4DW87eN7Qcmnm3Ag==
   dependencies:
     "@octokit/rest" "^18.0.6"
     debug "^4.2.0"
     fs-extra "^9.0.1"
-    livebundle-sdk "^0.3.2"
+    livebundle-sdk "^0.3.3"
 
-livebundle-notifier-terminal@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/livebundle-notifier-terminal/-/livebundle-notifier-terminal-0.3.2.tgz#97db898137678bd1e1a3c55d9aa69e0341dc9414"
-  integrity sha512-DPC8UwHLKXbGWOh/X/oQ1aBspjC1L0/o9snuGKbEj52LibBhzMdnzZpiZYdSpdHU8lQPP/hEWKdUQfVm39OCOQ==
+livebundle-notifier-terminal@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/livebundle-notifier-terminal/-/livebundle-notifier-terminal-0.3.3.tgz#8c99f35c5814e7e1ecaa3768a06b37e545f7471b"
+  integrity sha512-ZUGaShC9ukbJ/16SsAHUeuX7sL2REhFpVRDkvVaZm5xpo0+nPzdJLwUsH8zb6vtnN/e2j0J8EfUh6153NhAXmw==
   dependencies:
     chalk "^4.1.0"
     debug "^4.2.0"
-    livebundle-sdk "^0.3.2"
+    livebundle-sdk "^0.3.3"
     tmp "^0.2.1"
 
-livebundle-notifier-viewer@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/livebundle-notifier-viewer/-/livebundle-notifier-viewer-0.3.2.tgz#395237113fb1abba2d5330b9e406fa18d1cfc7f9"
-  integrity sha512-3pGetmpLCrKzC59WansHkI4TAGqa1lY1SCes6PYiMdT8YcxsdBJudrVrBIvT9M8aeaZV+e6lNIxE5xO+o/KvnA==
+livebundle-notifier-viewer@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/livebundle-notifier-viewer/-/livebundle-notifier-viewer-0.3.3.tgz#d5813f86d9c6831a5c8df3a322e5c30442fa88d6"
+  integrity sha512-Cfgt70+L0/aC0ez0RVvQLdFZ0NeX5EHvmK2yDioarglwBIcuGwXXq8ZWMMO6l/Uznhcha3Y1+1D7vMBFNfQOWA==
   dependencies:
     debug "^4.2.0"
-    livebundle-sdk "^0.3.2"
+    livebundle-sdk "^0.3.3"
     open "^7.3.0"
     tmp "^0.2.1"
 
-livebundle-sdk@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/livebundle-sdk/-/livebundle-sdk-0.3.2.tgz#0da5313a2a40cafcb22fcb3be1d10cbe97278ed2"
-  integrity sha512-/cdu5HilhQIm50+Vs+pGjJfdRnB/5VeRzQ+UVQpy+LjgI4+L55Mul+l7x/SF7XCpvVk4Nv2BiCbWecxwh5pv9g==
+livebundle-sdk@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/livebundle-sdk/-/livebundle-sdk-0.3.3.tgz#6ec5b9296593c82dfc9634cdafbd5cee7018d89f"
+  integrity sha512-w86TM+aHgw60OR3gSnayitCphFshQo6lGlbjN5NvccT0O4VJ2xv2+6yhhFP2wgtmUiV4J5KgYWDfp4BC5vNRcg==
   dependencies:
     ajv "^6.12.6"
     debug "^4.2.0"
@@ -5024,44 +5024,55 @@ livebundle-sdk@^0.3.2:
     uuid "^8.3.1"
     yazl "^2.5.1"
 
-livebundle-storage-azure@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/livebundle-storage-azure/-/livebundle-storage-azure-0.3.2.tgz#585b9dda2511b8af0c9043cdd81ab2047090a455"
-  integrity sha512-TYDl29r4uQdRa9HVx4EqCs+71UOnhvZsYSlsGrqw9MXI1iFYxM0MUml/YPgcShmgtvZ/RjliUQc9tNlHqS28Ng==
+livebundle-server-metro@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/livebundle-server-metro/-/livebundle-server-metro-0.3.3.tgz#339adf8dd7c534d19cebe7492aac72e966fa5bd4"
+  integrity sha512-NSEZ4OV6xsyO3YURTvMOZt63w8O6b0pfF6e6yoQFwDXyIqIwk06yXSSHjcAazFgGAMwVXP8dny/Nqpg80vtFfg==
+  dependencies:
+    debug "^4.2.0"
+    fs-extra "^9.0.1"
+    livebundle-sdk "^0.3.3"
+    tmp "^0.2.1"
+
+livebundle-storage-azure@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/livebundle-storage-azure/-/livebundle-storage-azure-0.3.3.tgz#06cfe08dd58523e2ec755ebfdda01cee483db592"
+  integrity sha512-j350bjdslDnoBZsqfYfVtN/M/7MUov2QNAzClcopbGYrtSeSzJ1YLkNAEvgkKUcVNvb8+sDeTvK+69RrIzafJg==
   dependencies:
     "@azure/storage-blob" "^12.2.1"
     debug "^4.2.0"
     fs-extra "^9.0.1"
-    livebundle-sdk "^0.3.2"
+    livebundle-sdk "^0.3.3"
 
-livebundle-storage-fs@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/livebundle-storage-fs/-/livebundle-storage-fs-0.3.2.tgz#8f3c04a496c37e7576fd33690bb8a7aa2abc110e"
-  integrity sha512-uXM95FNXDhNX529VxRUE+1GCgDqeo6OGpiIcrvMck2aSh9spUohGrDmleOjNJGjoh7SFGJ6noGCOjZvrfBDU0g==
+livebundle-storage-fs@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/livebundle-storage-fs/-/livebundle-storage-fs-0.3.3.tgz#bcf154be2b8248d74165d2d750da2223348cb390"
+  integrity sha512-9CAlTzFurfBjKCnIt10DODec4yS3j0MIS0xP5gYTA4Hj1eZ+TVXMiGe2RlClglhyh5UmW25gclMI0otmj4/0Lw==
   dependencies:
     debug "^4.2.0"
     fs-extra "^9.0.1"
-    livebundle-sdk "^0.3.2"
+    livebundle-sdk "^0.3.3"
     tmp "^0.2.1"
 
-livebundle@^0.3.5:
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/livebundle/-/livebundle-0.3.5.tgz#b87e86be4b4e72c0d4aff17fbdd34d86f1372c03"
-  integrity sha512-HY2+hu/Gh2rOvO6XDp5rL0t7yA/SbhD3uwHtAiXzFIfv3WH4qdSA5NG9xv8733anfuvaJk/YTKD2N0vVntCj9w==
+livebundle@^0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/livebundle/-/livebundle-0.3.6.tgz#de3c1af0f1d684354948f1468c367257ec602325"
+  integrity sha512-2MP07/ZvrHGhyzshoijkjZBMDUOsTVvGF8G9bGkPY33BqV6394XIvxpKZIg+bzApUJNFq8s4ApYo1zXjWYU8og==
   dependencies:
     chalk "^4.1.0"
     commander "^6.1.0"
     debug "^4.2.0"
     fs-extra "^9.0.1"
-    livebundle-bundler-metro "^0.3.2"
-    livebundle-generator-deeplink "^0.3.2"
-    livebundle-generator-qrcode "^0.3.3"
-    livebundle-notifier-github "^0.3.2"
-    livebundle-notifier-terminal "^0.3.2"
-    livebundle-notifier-viewer "^0.3.2"
-    livebundle-sdk "^0.3.2"
-    livebundle-storage-azure "^0.3.2"
-    livebundle-storage-fs "^0.3.2"
+    livebundle-bundler-metro "^0.3.3"
+    livebundle-generator-deeplink "^0.3.3"
+    livebundle-generator-qrcode "^0.3.4"
+    livebundle-notifier-github "^0.3.3"
+    livebundle-notifier-terminal "^0.3.3"
+    livebundle-notifier-viewer "^0.3.3"
+    livebundle-sdk "^0.3.3"
+    livebundle-server-metro "^0.3.3"
+    livebundle-storage-azure "^0.3.3"
+    livebundle-storage-fs "^0.3.3"
     lodash "^4.17.20"
     node-emoji "^1.10.0"
     open "^7.3.0"
