@@ -2,6 +2,10 @@
 bundler:
   metro:
 
+# React Native server
+server:
+  metro:
+
 # Storage
 storage:
   fs:
