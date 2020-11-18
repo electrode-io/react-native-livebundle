@@ -1,6 +1,13 @@
 # JavaScript bundler
 bundler:
   metro:
+    bundles:
+      - dev: true
+        entry: index.js
+        platform: ios
+      - dev: false
+        entry: index.js
+        platform: ios
 
 # React Native server
 server:

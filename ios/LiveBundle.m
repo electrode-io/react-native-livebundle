@@ -4,6 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <UIKit/UIKit.h>
 #import <React/RCTReloadCommand.h>
+#import <React/RCTBundleURLProvider.h>
 
 #if __has_include(<React/RCTRootView.h>)
 #import <React/RCTRootView.h>
@@ -27,12 +28,12 @@ static NSString *packageId = @"";
 static BOOL isBundleInstalled = NO;
 static BOOL isSessionStarted = NO;
 static BOOL sIsInitialLaunch = YES;
-static NSString *jsPath = @"";
+static NSString *urlString = @"";
 @synthesize bridge = _bridge;
 
 - (instancetype)initWithstorageUrl:(NSString*)storageUrl storageUrSulffix:(NSString*)storageUrlSuffix {
     if (self = [super init]) {
-        sStorageUrl = storageUrl;
+        sStorageUrl = [storageUrl stringByStandardizingPath];
         sStorageUrlSuffix = storageUrlSuffix;
     }
     return self;
@@ -67,9 +68,9 @@ RCT_EXPORT_METHOD(getState:(RCTPromiseResolveBlock)resolve reject:(__unused RCTP
 
 RCT_EXPORT_METHOD(launchUI:(NSDictionary *)props resolve:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (![jsPath  isEqual: @""]) {
-        NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:jsPath];
-        [self->_bridge.parentBridge setBundleURL:bundleURL];
+        if (![urlString  isEqual: @""]) {
+        NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:urlString];
+        [self->_bridge setBundleURL:bundleURL];
     }
         RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:self->_bridge
                                                          moduleName:@"LiveBundleUI"
@@ -88,17 +89,31 @@ RCT_EXPORT_METHOD(reset:(RCTPromiseResolveBlock)resolve reject:(__unused RCTProm
         packageId = @"";
         bundleId = @"";
         isBundleInstalled = NO;
-        jsPath = @"";
+        isSessionStarted = NO;
+        urlString = @"";
         NSURL *url;
 #if DEBUG
         url = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 #else
-        url = [[NSBundle mainBundle] URLForResource:@"livebundle" withExtension:@"js"];
+        url = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
         [self->_bridge setBundleURL: url];
         UINavigationController *rootVC = (UINavigationController*)[[[UIApplication sharedApplication] keyWindow] rootViewController];
         [rootVC popViewControllerAnimated:NO];
         RCTTriggerReloadCommandListeners(@"reset bridge");
+        resolve(nil);
+    });
+}
+
+RCT_EXPORT_METHOD(launchLiveSession:(NSString *)serverHost resolve:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        urlString = [NSString stringWithFormat:@"http://%@/index.bundle?platform=ios&dev=false&minify=true", serverHost];
+        NSURL *url = [[NSURL alloc] initWithString:urlString];
+        [self->_bridge setBundleURL: url];
+        UINavigationController *rootVC = (UINavigationController*)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+        [rootVC popViewControllerAnimated:NO];
+        isSessionStarted = YES;
+        RCTTriggerReloadCommandListeners(@"launch Live Session");
         resolve(nil);
     });
 }
@@ -119,8 +134,8 @@ RCT_EXPORT_METHOD(reset:(RCTPromiseResolveBlock)resolve reject:(__unused RCTProm
     dispatch_async(dispatch_get_main_queue(), ^{
         UINavigationController *rootVC = (UINavigationController*)[[[UIApplication sharedApplication] keyWindow] rootViewController];
         [rootVC popViewControllerAnimated:NO];
-        if (![jsPath  isEqual: @""]) {
-            NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:jsPath];
+        if (![urlString  isEqual: @""]) {
+            NSURL *bundleURL = [[NSURL alloc] initFileURLWithPath:urlString];
             [self->_bridge setBundleURL:bundleURL];
         }
         RCTTriggerReloadCommandListeners(@"install new bundle");
@@ -128,8 +143,8 @@ RCT_EXPORT_METHOD(reset:(RCTPromiseResolveBlock)resolve reject:(__unused RCTProm
 }
 
 RCT_EXPORT_METHOD(downloadBundle:(NSString *)pId bundleId: (NSString *)bId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-    NSString *urlString = [NSString stringWithFormat:@"%@/packages/%@/%@%@", sStorageUrl, pId, bId, sStorageUrlSuffix];
-    NSURL *url = [NSURL URLWithString:urlString];
+    NSString *packageUrlString = [NSString stringWithFormat:@"%@/packages/%@/%@%@", sStorageUrl, pId, bId, sStorageUrlSuffix];
+    NSURL *url = [NSURL URLWithString:packageUrlString];
     bundleId = bId;
     packageId = pId;
     dispatch_queue_t queue = dispatch_get_global_queue(0,0);
@@ -139,18 +154,18 @@ RCT_EXPORT_METHOD(downloadBundle:(NSString *)pId bundleId: (NSString *)bId resol
         NSString *path = [paths objectAtIndex:0];
         //Save the data
         NSString *zipPath = [path stringByAppendingPathComponent:liveBundle_zip];
-        jsPath = [path stringByAppendingPathComponent:liveBundle_js];
+        urlString = [path stringByAppendingPathComponent:liveBundle_js];
         NSString *liveBundlePath = [path stringByAppendingPathComponent:bundleId];
         zipPath = [zipPath stringByStandardizingPath];
-        jsPath = [jsPath stringByStandardizingPath];
+        urlString = [urlString stringByStandardizingPath];
         NSError *error = nil;
         liveBundlePath = [liveBundlePath stringByStandardizingPath];
         [urlData writeToFile:zipPath atomically:YES];
         [SSZipArchive unzipFileAtPath:zipPath toDestination:path];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:jsPath]) {
-            [[NSFileManager defaultManager] removeItemAtPath:jsPath error:&error];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:urlString]) {
+            [[NSFileManager defaultManager] removeItemAtPath:urlString error:&error];
         }
-        [[NSFileManager defaultManager] moveItemAtPath:liveBundlePath toPath:jsPath error:&error];
+        [[NSFileManager defaultManager] moveItemAtPath:liveBundlePath toPath:urlString error:&error];
         [[NSFileManager defaultManager] removeItemAtPath:zipPath error:&error];
         resolve(nil);
     });

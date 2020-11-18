@@ -33,8 +33,8 @@ static void InitializeFlipper(UIApplication *application) {
   InitializeFlipper(application);
 #endif
   NSString* storageUrlSuffix = @"";
-  NSString *storageUrl = @"http://127.0.0.1:8080";
-  [[LiveBundle alloc] initWithstorageUrl:storageUrl storageUrSulffix:storageUrlSuffix];
+  NSString *storageUrl = @"http://192.168.1.7:8080";
+  LiveBundle *saved __attribute__((unused)) =[[LiveBundle alloc] initWithstorageUrl:storageUrl storageUrSulffix:storageUrlSuffix];
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
