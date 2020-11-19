@@ -4,9 +4,6 @@
 	<br>
 </h1>
 
-**This project is still in incubation.
-If you are cloning this repository at this stage, be ready for a wild ride with potential consequent repository updates and breaking changes from one day to the next. _Or to put it another way : 'Not ready for production'._**
-
 ## Getting started
 
 If you aren't yet familiar with LiveBundle, you can try out the [LiveBundle demo application](./example). Otherwise, if you're already familiar with LiveBundle or don't want to bother with the demo, you can jump straight ahead.
