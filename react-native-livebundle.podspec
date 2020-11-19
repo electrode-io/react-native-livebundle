@@ -19,5 +19,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React"
+  s.dependency "SSZipArchive", "~> 2.2.3"
 end
 
