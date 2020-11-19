@@ -2,6 +2,7 @@
 #import "SSZipArchive.h"
 #import <React/RCTBridge+Private.h>
 #import <React/RCTBundleURLProvider.h>
+#import <React/RCTUtils.h>
 #import <UIKit/UIKit.h>
 #import <React/RCTReloadCommand.h>
 #import <React/RCTBundleURLProvider.h>
@@ -167,7 +168,11 @@ RCT_EXPORT_METHOD(downloadBundle:(NSString *)pId bundleId: (NSString *)bId resol
         }
         [[NSFileManager defaultManager] moveItemAtPath:liveBundlePath toPath:urlString error:&error];
         [[NSFileManager defaultManager] removeItemAtPath:zipPath error:&error];
-        resolve(nil);
+        if (error) {
+            reject(@"DOWNLOAD_ERROR", nil, RCTErrorWithMessage(error.description));
+        } else {
+            resolve(nil);
+        }
     });
 }
 
