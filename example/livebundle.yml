@@ -5,9 +5,9 @@ bundler:
       - dev: true
         entry: index.js
         platform: ios
-      - dev: false
+      - dev: true
         entry: index.js
-        platform: ios
+        platform: android
 
 # React Native server
 server:
@@ -22,6 +22,7 @@ storage:
 generators:
   qrcode:
   deeplink:
+    host: io.livebundle.example
 
 # Notifiers
 notifiers:

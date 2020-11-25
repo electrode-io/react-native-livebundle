@@ -97,10 +97,10 @@ export class LiveBundle {
    */
   launchUIFromDeepLink(deepLinkUrl) {
     console.log(`[LiveBundle] launchUIFromDeepLink(${deepLinkUrl})`);
-    if (deepLinkUrl === 'livebundle://menu') {
+    if (/livebundle:\/\/.+\/menu/.test(deepLinkUrl)) {
       return this.launchUI();
     }
-    const reurl = /livebundle:\/\/(sessions|packages)\?id=(.+)/;
+    const reurl = /livebundle:\/\/.+\/(sessions|packages)\?id=(.+)/;
     const capture = reurl.exec(deepLinkUrl);
     if (capture) {
       const [,host, id] = capture;
