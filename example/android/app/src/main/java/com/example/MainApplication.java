@@ -48,8 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
     LiveBundle.initialize(
       getReactNativeHost(),
-      "http://127.0.0.1:8080",
-      null);
+      "http://127.0.0.1:8080");
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
 
