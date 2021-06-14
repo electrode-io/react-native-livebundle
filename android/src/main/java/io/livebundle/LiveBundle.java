@@ -165,6 +165,19 @@ public class LiveBundle extends ReactContextBaseJavaModule {
    *
    * @param reactNativeHost   Instance of ReactNativeHost to use
    * @param storageUrl        Storage url
+   */
+  public static void initialize(
+    ReactNativeHost reactNativeHost,
+    String storageUrl) {
+    LiveBundle.initialize(reactNativeHost, storageUrl, null);
+  }
+
+  /**
+   * Initialize LiveBundle
+   * Should be called by client application during application start
+   *
+   * @param reactNativeHost   Instance of ReactNativeHost to use
+   * @param storageUrl        Storage url
    * @param storageUrlSuffix  Storage url suffix
    */
   public static void initialize(
