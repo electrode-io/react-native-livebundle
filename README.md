@@ -4,6 +4,8 @@
 	<br>
 </h1>
 
+[![ci][1]][2]
+
 **LiveBundle Documentation is available @ https://www.livebundle.io/docs**
 
 ## Getting started
@@ -48,3 +50,6 @@ Each application is different, so we cannot tell you precisely where from to mak
 To generate and upload LiveBundle packages, you will need to add the [LiveBundle CLI](https://github.com/electrode-io/livebundle) to your application project. Please refer to the [README](https://github.com/electrode-io/livebundle/blob/master/README.md) of this project for instructions about setup and configuration.
 
 *LiveBundle native module project was kickstarted using [create-react-native-module](https://github.com/brodybits/create-react-native-module) tool*
+
+[1]: https://github.com/electrode-io/react-native-livebundle/workflows/ci/badge.svg
+[2]: https://github.com/electrode-io/react-native-livebundle/actions
