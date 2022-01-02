@@ -25,5 +25,12 @@ target 'example' do
 
   post_install do |installer|
     react_native_post_install(installer)
+
+    # Fix openssl incompatibility on case-sensitive fs
+    unless File.exist? "pods"
+      ['ios-arm64_arm64e_armv7_armv7s', 'ios-arm64_i386_x86_64-simulator', 'ios-arm64_x86_64-maccatalyst', 'macos-arm64_arm64e_x86_64'].each do |d|
+        system("cd Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework/#{d} && ln -Fs {OpenSSL,openssl}.framework")
+      end
+    end
   end
 end
