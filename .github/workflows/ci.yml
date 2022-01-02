@@ -12,15 +12,23 @@ jobs:
         with:
           node-version: '16'
       - run: yarn --frozen-lockfile
-  build-example:
+  build-example-android:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: example
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - run: yarn --frozen-lockfile
-      - run: yarn lint
+      - working-directory: example/
+        run: yarn --frozen-lockfile
+      - working-directory: example/android/
+        run: ./gradlew assembleDebug test lint
+  build-example-ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - working-directory: example/
+        run: yarn --frozen-lockfile
+      - working-directory: example/ios/
+        run: pod install
+      - working-directory: example/ios/
+        run: xcodebuild -workspace example.xcworkspace -scheme example build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED=NO
