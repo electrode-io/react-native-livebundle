@@ -3,15 +3,14 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-
-project 'example',
-  'Debug' => :debug,
-  'Release' => :release
-
 target 'example' do
   config = use_native_modules!
 
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
 
   target 'exampleTests' do
     inherit! :complete
@@ -22,17 +21,16 @@ target 'example' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
-  use_flipper!({ 'Flipper' => '0.74.0' })
+  use_flipper!()
+
   post_install do |installer|
-    flipper_post_install(installer)
-  end
-end
+    react_native_post_install(installer)
 
-target 'example-tvOS' do
-  # Pods for example-tvOS
-
-  target 'example-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
+    # Fix openssl incompatibility on case-sensitive fs
+    unless File.exist? "pods"
+      ['ios-arm64_arm64e_armv7_armv7s', 'ios-arm64_i386_x86_64-simulator', 'ios-arm64_x86_64-maccatalyst', 'macos-arm64_arm64e_x86_64'].each do |d|
+        system("cd Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework/#{d} && ln -Fs {OpenSSL,openssl}.framework")
+      end
+    end
   end
 end
