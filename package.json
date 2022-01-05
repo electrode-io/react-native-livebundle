@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "LiveBundle native module",
   "main": "index.js",
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint ."
+  },
   "files": [
     "README.md",
     "android",
@@ -23,6 +27,8 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
+    "@react-native-community/eslint-config": "^2.0.0",
+    "eslint": "7.14.0",
     "react": "17.0.1",
     "react-native": "0.64.1",
     "react-native-camera": "^3.43.8"
