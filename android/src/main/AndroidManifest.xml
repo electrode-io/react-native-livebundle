@@ -1,7 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="io.livebundle">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.livebundle"
+    >
+
     <application>
-       <activity android:name="io.livebundle.LiveBundleActivity" android:exported="true">
-        </activity>
+        <activity
+            android:name="io.livebundle.LiveBundleActivity"
+            android:exported="true"
+            />
     </application>
 </manifest>
