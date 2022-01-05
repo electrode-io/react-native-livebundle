@@ -1,5 +1,5 @@
-import { NativeModules, Platform, Linking } from "react-native";
-import { setCustomSourceTransformer } from "react-native/Libraries/Image/resolveAssetSource";
+import {Linking, NativeModules, Platform} from 'react-native';
+import {setCustomSourceTransformer} from 'react-native/Libraries/Image/resolveAssetSource';
 
 export class LiveBundle {
   /**
@@ -7,7 +7,7 @@ export class LiveBundle {
    * This method should be called by client app on launch
    */
   initialize() {
-    console.log("[LiveBundle] initialize()");
+    console.log('[LiveBundle] initialize()');
     if (!this.isInitialized) {
       const nm = NativeModules.LiveBundle;
       this.STORAGE_URL = nm.STORAGE_URL;
@@ -17,13 +17,13 @@ export class LiveBundle {
       this.IS_BUNDLE_INSTALLED = nm.IS_BUNDLE_INSTALLED;
       this.IS_SESSION_STARTED = nm.IS_SESSION_STARTED;
       if (this.IS_BUNDLE_INSTALLED) {
-        setCustomSourceTransformer((resolver) => {
-          const { hash } = resolver.asset;
+        setCustomSourceTransformer(resolver => {
+          const {hash} = resolver.asset;
           const res = resolver.scaledAssetPath();
-          const filename = res.uri.replace(/^.*[\/]/, "");
+          const filename = res.uri.replace(/^.*[/]/, '');
           const platformFileName = filename.replace(
             /(^.*)(\..+)/,
-            `$1.${Platform.OS}$2`
+            `$1.${Platform.OS}$2`,
           );
           res.uri = this.getUrl(`assets/${hash}/${platformFileName}`);
           return res;
@@ -33,7 +33,7 @@ export class LiveBundle {
       if (nm.IS_INITIAL_LAUNCH) {
         Linking.getInitialURL().then(url => {
           url && this.launchUIFromDeepLink(url);
-        })
+        });
       }
     }
   }
@@ -43,7 +43,9 @@ export class LiveBundle {
    * @param {string} resourcePath Path to resource
    */
   getUrl(resourcePath) {
-    return `${this.STORAGE_URL}/${resourcePath}${this.STORAGE_URL_SUFFIX ?? ""}`;
+    return `${this.STORAGE_URL}/${resourcePath}${
+      this.STORAGE_URL_SUFFIX ?? ''
+    }`;
   }
 
   /**
@@ -55,14 +57,14 @@ export class LiveBundle {
     console.log(`[LiveBundle] getMetadata(${type}, ${id})`);
     const res = await fetch(
       this.getUrl(
-        `${type === "PACKAGE" ? "packages" : "sessions"}/${id}/metadata.json`
-      )
+        `${type === 'PACKAGE' ? 'packages' : 'sessions'}/${id}/metadata.json`,
+      ),
     );
     if (!res.ok) {
       throw new Error(
         `[LiveBundle] getMetadata request failed : ${res.status} ${(
           await res.text()
-        ).toString()}`
+        ).toString()}`,
       );
     }
     return res.json();
@@ -73,7 +75,7 @@ export class LiveBundle {
    * @param {string} packageId The id of the package
    */
   async getPackageMetadata(packageId) {
-    return this.getMetadata("PACKAGE", packageId);
+    return this.getMetadata('PACKAGE', packageId);
   }
 
   /**
@@ -81,14 +83,14 @@ export class LiveBundle {
    * @param {string} sessionId The id of the session
    */
   async getSessionMetadata(sessionId) {
-    return this.getMetadata("SESSION", sessionId);
+    return this.getMetadata('SESSION', sessionId);
   }
 
   /**
    * Launches LiveBundle UI
    */
   launchUI(props) {
-    console.log("[LiveBundle] launchUI()");
+    console.log('[LiveBundle] launchUI()');
     NativeModules.LiveBundle.launchUI(props);
   }
 
@@ -103,7 +105,7 @@ export class LiveBundle {
     const reurl = /livebundle:\/\/.+\/(sessions|packages)\?id=(.+)/;
     const capture = reurl.exec(deepLinkUrl);
     if (capture) {
-      const [,host, id] = capture;
+      const [, host, id] = capture;
       switch (host) {
         case 'packages':
           this.launchUI({packageId: id});
@@ -120,7 +122,7 @@ export class LiveBundle {
    * This will reload original application bundle
    */
   async reset() {
-    console.log("[LiveBundle] reset()");
+    console.log('[LiveBundle] reset()');
     setCustomSourceTransformer(undefined);
     return NativeModules.LiveBundle.reset();
   }
@@ -154,11 +156,11 @@ export class LiveBundle {
     console.log(`[LiveBundle] donwloadBundleFlavor(${packageId}, ${flavor})`);
     const pkgMetadata = await this.getPackageMetadata(packageId);
     const bundle = pkgMetadata.bundles.find(
-      (b) => (flavor === "dev" ? b.dev : !b.dev) && b.platform === Platform.OS
+      b => (flavor === 'dev' ? b.dev : !b.dev) && b.platform === Platform.OS,
     );
     if (!bundle) {
       throw new Error(
-        `[LiveBundle] donwloadBundleFlavor no ${flavor} bundle found in package ${packageId}`
+        `[LiveBundle] donwloadBundleFlavor no ${flavor} bundle found in package ${packageId}`,
       );
     }
     return this.downloadBundle(packageId, bundle.id);
@@ -170,7 +172,7 @@ export class LiveBundle {
    */
   async donwloadDevBundle(packageId) {
     console.log(`[LiveBundle] donwloadDevBundle(${packageId})`);
-    return this.donwloadBundleFlavor(packageId, "dev");
+    return this.donwloadBundleFlavor(packageId, 'dev');
   }
 
   /**
@@ -179,7 +181,7 @@ export class LiveBundle {
    */
   async donwloadProdBundle(packageId) {
     console.log(`[LiveBundle] donwloadProdBundle(${packageId})`);
-    return this.donwloadBundleFlavor(packageId, "prod");
+    return this.donwloadBundleFlavor(packageId, 'prod');
   }
 
   /**
@@ -188,7 +190,7 @@ export class LiveBundle {
    * the new bundle
    */
   async installBundle() {
-    console.log("[LiveBundle] installBundle()");
+    console.log('[LiveBundle] installBundle()');
     return NativeModules.LiveBundle.installBundle();
   }
 }
@@ -197,5 +199,5 @@ const livebundle = new LiveBundle();
 export default livebundle;
 
 Linking.addEventListener('url', ({url}) => {
-  livebundle.launchUIFromDeepLink(url)
-})
+  livebundle.launchUIFromDeepLink(url);
+});
