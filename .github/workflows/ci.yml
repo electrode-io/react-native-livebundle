@@ -12,6 +12,7 @@ jobs:
         with:
           node-version: '16'
       - run: yarn --frozen-lockfile
+      - run: yarn lint
   build-android:
     runs-on: ubuntu-latest
     steps:

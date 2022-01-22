@@ -1,19 +1,12 @@
-//
-//  CustomDevMenuModule.m
-//  CocoaAsyncSocket
-//
-//  Created by Lianci Liu on 10/5/20.
-//
-
-#import <Foundation/Foundation.h>
 #import "CustomDevMenuModule.h"
 #import "LiveBundle.h"
+#import <Foundation/Foundation.h>
 #if __has_include(<React/RCTRootView.h>)
 #import <React/RCTRootView.h>
 #elif __has_include("RCTRootView.h")
 #import "RCTRootView.h"
 #else
-#import "React/RCTRootView.h"   // Required when used as a Pod in a Swift project
+#import "React/RCTRootView.h" // Required when used as a Pod in a Swift project
 #endif
 
 @implementation CustomDevMenuModule
@@ -28,50 +21,49 @@ RCTDevMenuItem *_devMenuItem;
 
 RCT_EXPORT_MODULE();
 
-- (dispatch_queue_t)methodQueue
-{
-  return dispatch_get_main_queue();
+- (dispatch_queue_t)methodQueue {
+    return dispatch_get_main_queue();
 }
 
-+ (BOOL)requiresMainQueueSetup
-{
-  return YES;
++ (BOOL)requiresMainQueueSetup {
+    return YES;
 }
 
-- (instancetype)init
-{
-  return [super init];
+- (instancetype)init {
+    return [super init];
 }
 
-- (void)setBridge:(RCTBridge *)bridge
-{
-  _bridge = bridge;
+- (void)setBridge:(RCTBridge *)bridge {
+    _bridge = bridge;
 #if __has_include(<React/RCTDevMenu.h>)
-  [_bridge.devMenu addItem:self.devMenuItem];
+    [_bridge.devMenu addItem:self.devMenuItem];
 #endif
 }
 
 #if __has_include(<React/RCTDevMenu.h>)
 
-- (RCTDevMenuItem *)devMenuItem
-{
-  if (!_devMenuItem) {
-    _devMenuItem =
-    [RCTDevMenuItem buttonItemWithTitleBlock:^NSString *{
-      return @"Live Bundle";
-    } handler:^{
-      NSLog(@"Download LiveBundle");
-        RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:self.bridge
-                                                         moduleName:@"LiveBundleUI"
-                                                  initialProperties:nil];
-        UIViewController * vc = [[UIViewController alloc] init];
-        vc.view = rootView;
-        UINavigationController *rootVC = (UINavigationController*)[[[UIApplication sharedApplication] keyWindow] rootViewController];
-        [rootVC pushViewController:vc animated:true];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Download LiveBundle" object:nil];
-    }];
-  }
-  return _devMenuItem;
+- (RCTDevMenuItem *)devMenuItem {
+    if (!_devMenuItem) {
+        _devMenuItem = [RCTDevMenuItem
+            buttonItemWithTitleBlock:^NSString * {
+              return @"Live Bundle";
+            }
+            handler:^{
+              NSLog(@"Download LiveBundle");
+              RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:self.bridge
+                                                               moduleName:@"LiveBundleUI"
+                                                        initialProperties:nil];
+              UIViewController *vc = [[UIViewController alloc] init];
+              vc.view = rootView;
+              UINavigationController *rootVC =
+                  (UINavigationController *)[[[UIApplication sharedApplication] keyWindow]
+                      rootViewController];
+              [rootVC pushViewController:vc animated:true];
+              [[NSNotificationCenter defaultCenter] postNotificationName:@"Download LiveBundle"
+                                                                  object:nil];
+            }];
+    }
+    return _devMenuItem;
 }
 
 #endif
